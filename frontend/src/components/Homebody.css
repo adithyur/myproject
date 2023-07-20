@@ -1,0 +1,22 @@
+.cardbox{
+    padding-left: 180px;
+    padding-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    width: 100%;
+    text-align: justify;
+   
+}
+
+.cards{
+    width: 300px;
+    border:none
+}
+
+.card-img-top {
+    border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+  }

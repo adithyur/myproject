@@ -1,0 +1,70 @@
+.usform{
+    background-color: rgb(255, 255, 255);
+    height: 100%;
+    padding-left: 250px;
+}
+
+#description{
+    height: 30px;
+}
+.usraddform {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 80%;
+    grid-gap: 10px;
+    margin-left: 80px;
+    margin-top: 10px;
+  }
+  
+  .usraddform label {
+    margin-bottom: 4px;
+  }
+  
+  .usraddform input,
+  .usraddform select,
+  .usraddform textarea {
+    margin-bottom: 12px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .usraddform .radio-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .usraddform button {
+    padding: 8px 16px;
+    background-image: linear-gradient(135deg, #f34079 40%, #fc894d);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    
+  }
+  
+  .usraddform button[type='submit'] {
+    margin-right: 8px;
+  }
+  
+  .usraddform button:focus {
+    outline: none;
+  }
+  
+  .usraddform button:disabled {
+    background-color: #870404;
+    cursor: not-allowed;
+  }
+
+  .protype{
+    margin-left: 10px;
+    display: flex;
+    font-size: large;
+  }
+
+  .radio-group{
+    padding-left: 10px;
+    font-size:large
+  }

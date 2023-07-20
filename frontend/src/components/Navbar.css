@@ -1,0 +1,119 @@
+
+/*.main-navbar{
+    border-bottom: 1px solid #cccccc;
+}*/
+.main-navbar .top-navbar{
+    /*background-image: linear-gradient(135deg, #f34079 40%, #fc894d);*/
+    padding-top: 25px;
+    padding-bottom: 10px;
+    height: 90px;
+    border-bottom: 1px solid #cccccc;
+}
+.main-navbar .top-navbar .brand-name{
+    font-weight: bold;
+    font-size: xx-large;
+    /*color: linear-gradient(135deg, #f34079 40%, #fc894d);*/
+}
+.main-navbar .top-navbar .nav-link{
+    font-size: 20px;
+    font-weight: 500;
+}
+.main-navbar .top-navbar .dropdown-menu{
+    padding: 0px 0px;
+    border-radius: 0px;
+}
+.main-navbar .top-navbar .dropdown-menu .dropdown-item{
+    padding: 8px 16px;
+    border-bottom: 1px solid #cccccc;
+    font-size: 14px;
+}
+.main-navbar .top-navbar .dropdown-menu .dropdown-item i{
+    width: 20px;
+    text-align: center;
+    color: #0bf436;
+    font-size: 14px;
+}
+.main-navbar .navbar{
+    padding: 0px;
+    padding-left: 100px;
+    height: 100px;
+    background-color: #ffffff;
+}
+.main-navbar .navbar .nav-item .nav-link{
+    padding: 8px 20px;
+    color: #070707;
+    font-size: 15px;
+}
+
+@media only screen and (max-width: 600px) {
+    .main-navbar .top-navbar .nav-link{
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+}
+
+.icon{
+    width: 30px !important;
+    height: 30px !important;
+    color: #717171;
+  }
+
+  .icon-container {
+    display: flex;
+    padding-left: 75px;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+  }
+  
+  .text {
+    padding-top: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #717171;
+  }
+
+  .icon-container:hover {
+    background-color: #fff;
+  }
+  
+  .icon-container:hover .text {
+    color: rgb(27, 27, 24);
+  }
+  .icon-container:hover .icon {
+    color: rgb(27, 27, 24);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #f34079 40%, #fc894d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    
+  }
+
+  .search-button {
+    border: none;
+    border-radius: 20px;
+    color: #fff;
+    padding-top: 12px;
+  }
+  .search-button1{
+    padding-right: 10px;
+    padding-left: 10px;
+    border-radius: 80px
+  }
+  .search-button .search-button1{
+  position: absolute;
+  margin-left: -45px;
+  background: linear-gradient(135deg, #f34079 40%, #fc894d);
+  border: none;
+  color: #fff;
+  }
+
+  .form-control{
+    height: 50px;
+  }
+
+  
+

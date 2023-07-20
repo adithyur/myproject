@@ -1,0 +1,192 @@
+.loginc1{
+    background-color: rgb(255, 255, 255);
+    width:100%;
+    height: 100vh;
+    margin:0;
+    position: absolute;
+    display: flex;
+  }
+  .logincontainer1{
+    display: flex;
+    margin-left: 200px;
+    margin-top: 50px;
+    border: solid;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-width: 2px;
+    border-color: black;
+    height: 80%;
+    width: 75%;
+  }
+  
+  .logincontainer2,.logincontainer3{
+    flex-basis: 50%;
+  }
+  .logincontainer2{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url(/images/welcome.png);
+  }
+  .logincontainer3{
+    background-color: rgb(255,255,255);
+    align-items: center;
+  padding-top: 150px;
+  }
+
+  .icon1{
+    width: 24px !important;
+    height: 24px !important;
+    
+  }
+
+  .logint{
+    height: 45px;
+    border-radius: 20px;
+    padding: 10px;
+    border-width: 0.5px;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .log {
+    margin-left: 278px;
+    align-items: center;
+    background-image: linear-gradient(135deg, #f34079 40%, #fc894d);
+    border: 0;
+    border-radius: 10px;
+    box-sizing: border-box;
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    font-family: "Codec cold",sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    height: 45px;
+    justify-content: center;
+    letter-spacing: .4px;
+    line-height: 1;
+    width: 100px;
+    padding-left: 25px;
+    padding-right: 20px;
+    padding-top: 3px;
+    text-decoration: none;
+    text-transform: uppercase;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  
+  .log:active {
+    outline: 0;
+  }
+  
+  .log:hover {
+    outline: 0;
+  }
+  
+  .log span {
+    transition: all 200ms;
+  }
+  
+  .log:hover span {
+    transform: scale(.9);
+    opacity: .75;
+  }
+  
+  @media screen and (max-width: 991px) {
+    .log {
+      font-size: 15px;
+      height: 50px;
+    }
+  
+    .log span {
+      line-height: 50px;
+    }
+  }
+
+  .regi {
+    backface-visibility: hidden;
+    margin-left: 140px;
+    background: #332cf2;
+    border: 0;
+    border-radius: .375rem;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Circular,Helvetica,sans-serif;
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.3;
+    padding: 1rem 1.25rem;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transform: translateZ(0) scale(1);
+    transition: transform .2s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  
+  .regi:disabled {
+    color: #787878;
+    cursor: auto;
+  }
+  
+.regi:not(:disabled):hover {
+  transform: scale(1.05);
+}
+
+.regi:not(:disabled):hover:active {
+  transform: scale(1.05) translateY(.125rem);
+}
+
+.regi:focus {
+  outline: 0 solid transparent;
+}
+
+.regi:focus:before {
+  border-width: .125rem;
+  content: "";
+  left: calc(-1*.375rem);
+  pointer-events: none;
+  position: absolute;
+  top: calc(-1*.375rem);
+  transition: border-radius;
+  user-select: none;
+}
+
+.regi:focus:not(:focus-visible) {
+  outline: 0 solid transparent;
+}
+  .loginh{
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    padding-left: 10px;
+  }
+  .loginp{
+    font-family: Arial;
+    font-size: medium;
+
+  }
+  .logina1{
+    margin-left: 15px;
+    color: blue;
+    text-decoration: none;
+    
+  }
+  .logina2{
+    color: blue;
+    margin-left: 5%;
+    text-decoration: none;
+  }
+
+  /*
+   <Nav.Link href="/login">Login</Nav.Link>
+            <Nav.Link href="/buyerhome">User1</Nav.Link>
+            <Nav.Link href="/registration">Registration</Nav.Link>
+          </Nav>
+  */
