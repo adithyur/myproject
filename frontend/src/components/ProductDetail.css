@@ -5,6 +5,13 @@
 }
 .productdiv2{
   background-color: #f9f9f9 ;
+  padding-top: 10px;
+  display: flex;
+}
+
+.prosub{
+  background-color: transparent;
+  width: 80%;
   display: flex;
 }
 
@@ -30,14 +37,18 @@
 }
 
 .productbook{
-  height: 120px;
+  height: 80px;
   margin-right: 280px;
   padding-left: 10px;
   padding-top: 20px;
   text-align: left;
   background-color: #f9f9f9 ;
-  display: flex;
   
+}
+
+.rating{
+  text-align: left;
+  background-color: transparent;
 }
 
 .product-div-image{
@@ -94,46 +105,57 @@
     font-size: 16px;
     margin-bottom: 8px;
   }
-  .wishandcart{
-    padding-top: 40px;
-    padding-left:820px;
+  
+  .sharecartwishlist{
+    margin-left: 850px;
+    background-color: transparent;
+    width: 280px;
+    display: flex;
+
   }
   
   .wishlist-button {
-    margin-top: 60px;
-    padding-left: 800px;
     /*background-color: green;*/
     border: none;
-    cursor: pointer;
+    background-color: transparent;
     transition: color 0.3s, border-color 0.3s;
-
+    padding-top: 7px;
   }
   
   .wishlist-button span {
     margin-left: 5px;
   }
   
-  .wishlist-button:hover {
+  .wishlist-el:hover {
     color: red;
     border-color: red;
+    font-size: 18;
   }
-  
+  .wishlistbutton-text:hover{
+    color: red;
+    font-size: 18;
+    border-color: red; 
+  }
   .wishlist-button.saved {
     color: red;
+    font-size: 18;
   }
 
 .wishlist-button:hover .heart-icon,
 .wishlist-button.pressed .heart-icon {
   color: red;
+  font-size: 18;
 }
 
-  .heart-icon {
-    font-size: 16px;
+
+
+  /*.heart-icon {
+    font-size: 40px;
     
     transition: all 0.3s ease;
-  }
+  }*/
 
-  .button-text {
+  .wishlistbutton-text {
     text-decoration: underline;
   }
 
@@ -147,6 +169,41 @@
     text-align: left;
     padding-top: 10px;
   }
+
+  .cart-button span {
+    margin-left: 5px;
+  }
+
+  .cart-button{
+    border-width: 0px;
+    /*margin-top: 50px;
+    margin-left: 600px;*/
+    color: black;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    margin-left: 5px;
+  }
   
-  
-  
+  .cart-button:hover .cart-el,
+  .cart-button.pressed .cart-el {
+    color: blue;
+    cursor: pointer;
+  }
+
+  .cartbutton-text{
+    text-decoration: underline;
+    font-size: medium;
+  }
+
+  .share-button{
+    padding-top: 7px;
+    margin-left: 15px;
+    color: black;
+    
+  }
+
+  .share-button:hover{
+    color:green;
+    cursor: pointer;
+  }

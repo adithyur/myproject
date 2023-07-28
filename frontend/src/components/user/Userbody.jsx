@@ -36,7 +36,7 @@ export default function Userbody() {
 <div className='cardbox'>
         
         {product.map((cardData, index) => (
-        <div className="card1" key={index} onClick={() => handleCardClick(cardData._id)}>
+        <div className="cards" key={index} onClick={() => handleCardClick(cardData._id)}>
           <img className="card-img-top" src={`http://localhost:8000/${cardData.image}`} alt="Card" style={{ height: "250px" }} />
           <div className="card-body">
             <h5 className="card-title">{cardData.productName}</h5>

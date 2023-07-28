@@ -1,23 +1,48 @@
-import { useState , React} from 'react'
+import { useState , React} from 'react';
+import axios from "axios";
 import "./Profile.css";
 import NoIconNav from './NoIconNav';
 
+
 export default function Profile() {
 
-    const [address, setAddress] = useState('');
-    const [pinCode, setPinCode] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-  
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      // Handle form submission here
-      console.log('Form submitted:', { address, pinCode, city, state });
-      // Reset form fields
-      setAddress('');
-      setPinCode('');
-      setCity('');
-      setState('');
+    const authid= localStorage.getItem('authid')
+    const [formData, setFormData] = useState({
+      userid: authid,
+      fname: '', 
+      lname: '', 
+      address: '', 
+      pincode: '', 
+      city: '' ,
+      state: '' ,
+      mobile1: '' ,
+      mobile2: ''});
+
+    const handleChange = (e) => {
+      const { name, value, type } = e.target;
+      setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+    const handleSubmit = async(e) => {
+    e.preventDefault();
+    try{
+      if (formData.mobile1===formData.mobile2){
+        alert("use different mobile number as secondary")
+        }
+      else{
+        console.log(formData)
+        await axios.post('http://localhost:8000/api/profile/profile', formData);
+        setFormData({ fname: '', lname: '', address: '', pincode: '', city: '',state: '',mobile1: '',mobile2: '' });
+        alert(" successfully")
+      }
+    }
+     catch{
+      alert("can't insert address")
+    }
+
     };
     
   return (
@@ -30,10 +55,30 @@ export default function Profile() {
       <div>
         <input className='profileinput'
           type="text"
+          placeholder="First Name"
+          name="fname"
+          value={formData.fname}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        <input className='profileinput'
+          type="text"
+          placeholder="Last Name"
+          name="lname"
+          value={formData.lname}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        <input className='profileinput'
+          type="text"
           placeholder="Address"
-          id="address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          name="address"
+          value={formData.address}
+          onChange={handleChange}
           required
         />
       </div>
@@ -41,9 +86,9 @@ export default function Profile() {
         <input className='profileinput'
           type="text"
           placeholder='Pin Code'
-          id="pinCode"
-          value={pinCode}
-          onChange={(e) => setPinCode(e.target.value)}
+          name="pincode"
+          value={formData.pincode}
+          onChange={handleChange}
           required
         />
       </div>
@@ -51,9 +96,9 @@ export default function Profile() {
         <input className='profileinput'
           type="text"
           placeholder='City'
-          id="city"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
+          name="city"
+          value={formData.city}
+          onChange={handleChange}
           required
         />
       </div>
@@ -61,9 +106,35 @@ export default function Profile() {
         <input className='profileinput'
           type="text"
           placeholder='State'
-          id="state"
-          value={state}
-          onChange={(e) => setState(e.target.value)}
+          name="state"
+          value={formData.state}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        <input className='profileinput'
+          type="tel"
+          placeholder='Primary number'
+          name="mobile1"
+          pattern="[5-9]{1}[0-9]{9}"
+          maxLength="10"
+          title="Must contain 10 numbers and first digit in greater than 5"
+          value={formData.mobile1}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        <input className='profileinput'
+          type="tel"
+          placeholder='Secondary number'
+          name="mobile2"
+          pattern="[5-9]{1}[0-9]{9}"
+          maxLength="10"
+          title="Must contain 10 numbers and first digit in greater than 5"
+          value={formData.mobile2}
+          onChange={handleChange}
           required
         />
       </div>

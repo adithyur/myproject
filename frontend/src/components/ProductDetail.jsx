@@ -4,6 +4,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './ProductDetail.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { HiShoppingCart } from 'react-icons/hi';
+import { IoArrowRedoCircle } from 'react-icons/io5';
+
+
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -13,6 +17,7 @@ const ProductDetail = () => {
   const productId = searchParams.get('productId');
 
   const [isSaved, setIsSaved] = useState(false);
+  const [isCart, setIsCart] = useState(false);
 
   const handleButtonClick = async () => {
     const authid = localStorage.getItem('authid');
@@ -29,6 +34,21 @@ const ProductDetail = () => {
         }
       } catch (error) {
         console.error('Error updating wishlist:', error);
+      }
+    }
+  };
+
+  const handleCartClick = async  () => {
+    const authid = localStorage.getItem('authid');
+    if (!authid) {
+      navigate('/login');
+    } else {
+      try {
+            await axios.post('http://localhost:8000/api/cart/cart', { userid: authid, productid: productId });
+            setIsCart(true);
+        
+      } catch (error) {
+        console.error('Error updating cart:', error);
       }
     }
   };
@@ -59,6 +79,22 @@ const ProductDetail = () => {
       };
 
       fetchWishlistStatus();
+    }
+  }, [productId]);
+
+  useEffect(() => {
+    const authid = localStorage.getItem('authid');
+    if (authid) {
+      const fetchcartStatus = async () => {
+        try {
+          const res = await axios.get(`http://localhost:8000/api/cart/cart/${authid}/${productId}`);
+          setIsCart(res.data.exists);
+        } catch (error) {
+          console.error('Error fetching cart status:', error);
+        }
+      };
+
+      fetchcartStatus();
     }
   }, [productId]);
 
@@ -128,15 +164,33 @@ const ProductDetail = () => {
   </div>
   <div>
     <div className='productdiv1'>
+    <div className='productdiv8'>
       <div className='productbook'>
-      <h2>{product.productName}</h2>
-      <button className={`wishlist-button ${isSaved ? 'saved' : ''}`} onClick={handleButtonClick}>
-        <FontAwesomeIcon icon={faHeart} />
-        <span className="button-text">{isSaved ? 'Saved' : 'Save'}</span>
-      </button>
+        <h2>{product.productName}</h2>
+      </div>
+      <div className='prosub'>
+      <div className='rating'> 
+        <p style={{color: "green", fontWeight:'bolder', fontSize:"200"}}>4.3★</p>
+      </div>
+        <div className='sharecartwishlist'>
 
-    
-      
+          <a className='share-button' href='/share'>
+          <IoArrowRedoCircle style={{ marginRight: '5px', fontSize: '26px' }}/>
+          Share
+          </a> 
+
+          <button className="cart-button" onClick={handleCartClick} style={{ color: isCart ? 'blue' : 'black', fontSize: isCart ? '22px' : '22px' }}>
+              <span className='cart-el'><HiShoppingCart />
+                <span className="cartbutton-text">Cart</span>
+              </span>
+            </button>
+
+          <button className={`wishlist-button ${isSaved ? 'saved' : ''}`}  >
+            <span  className='wishlist-el' >  <FontAwesomeIcon icon={faHeart} style={{fontSize: "18"}}onClick={handleButtonClick} />
+            <span className="wishlistbutton-text" onClick={handleButtonClick}>{isSaved ? 'Saved' : 'Save'}</span></span>  
+          </button>
+        </div>
+      </div>
       </div>
       <div className='productdiv2'>
         <div className='product-div-image'>

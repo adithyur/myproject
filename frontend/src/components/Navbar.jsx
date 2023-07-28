@@ -54,14 +54,14 @@ function NavScrollExample() {
             
             <li className="nav-item">
             <div className="gradient-text">
-              <a className="nav-link" href="/registration">
+              <a className="nav-link" href="/AdminHome">
                 <i className="fa fa-shopping-cart" /> Cart
               </a>
             </div>
             </li>
             <li className="nav-item">
             <div className="gradient-text">
-              <a className="nav-link" href="/registration">
+              <a className="nav-link" href="/VerifierHome">
                 <i className="fa fa-heart" /> Wishlist
               </a>
             </div>

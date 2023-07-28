@@ -1,3 +1,7 @@
+.dummy{
+    text-align: right;
+}
+
 .wishlisthead{
     padding-top: 50px;
     height: 150px;
@@ -12,8 +16,8 @@
 }
 
 .wishlist_table{
-    margin-left: 250px;
-    width: 70%;
+    margin-left: 350px;
+    width: 60%;
 }
 
 .wishlist_tr{
@@ -22,11 +26,30 @@
     border-color: rgb(179, 174, 174);
 }
 
-.wishlist_th, .wishlist_td {
-    font-size: large;
+.wishlist_td {
+    font-size: x-large;
     font-family: "Arial", sans-serif;
     padding: 25px;
     text-align: center;
+    border-bottom: 1px solid #ddd;
+    height: 150px;
+}
+
+.wishlist_th_name, .wishlist_th {
+    font-size: large;
+    font-family: "Arial", sans-serif;
+    padding: 25px;
+    text-align: left;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ddd;
+    height: 100px;
+}
+
+.wishlist_name{
+    font-size: x-large;
+    font-family: 'Times New Roman', Times, serif;
+    padding-left: 20px;
+    text-align: left;
     border-bottom: 1px solid #ddd;
     height: 100px;
 }
@@ -42,49 +65,43 @@
 
 
 .wishlist_price{
-    font-size: large;
+    font-size: x-large;
     font-family: "Arial", sans-serif;
     color: rgb(11, 156, 9);
 }
 
-/*
-.wishlistlist{
-    margin-left: 250px;
-    padding-bottom: 10px;
-    background-color: rgb(71, 199, 159);
-    width: 70%;
+.wishlistcart-button{
+    border-width: 0px;
+    color: black;
+    font-size: 40;
 }
-.view_wishlist{*/
-    /*position: absolute;*/
-    /*padding-left: 10px;
-    
+  
+.wishlistcart-button:hover .cart-el2,
+.wishlistcart-button.pressed .cart-el2 {
+    color: blue;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.deleteicon{
+    color:black;
 
 }
 
-.wishlisttable{
-    border-width: 5px;
-}
-
-.wishlist_centre{
-    padding-left: 50px;
-
-}
-.wishlist_product_name{ 
-    padding-left: 10px;
-    padding-top: 5px;
-}
-
-.wishlist_text{
-    padding-top: 5px;
-    margin-left: -80px;
-    color: green;
-}
-
-.wishlist_image{
-    padding-top: 5px;
-}
-
-.wishlist_remove{
-    margin-top: 10px;
-    margin-left: 650px;
-}*/
+.deleteicon-wrapper {
+    display: inline-block;
+    /* Add any other styles you want for the wrapper */
+  }
+  
+.deleteicon {
+    /* Set the initial color to black or any other desired color */
+    color: black;
+    transition: color 0.3s; /* Add a transition to make the color change smooth */
+  
+    /* Add any other styles you want for the delete icon */
+  }
+  
+.deleteicon:hover {
+    /* Change the color to red on hover */
+    color: red;
+  }

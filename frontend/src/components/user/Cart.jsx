@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import "./UserNav.css"
-import "./Wishlist.css"
+import axios from 'axios';
+import { HiShoppingCart } from 'react-icons/hi';
 import { MdDelete } from 'react-icons/md';
-import { BsFillBookmarkHeartFill } from 'react-icons/bs';
+import "./UserNav.css";
+import "./Cart.css";
 
+function Cart() {
 
-function Wishlist() {
+    const [selectedRows, setSelectedRows] = useState([]);
 
     const deleteProduct = async (productId) => {
         const authid = localStorage.getItem('authid');
         try {
-          await axios.delete(`http://localhost:8000/api/wishlist/wishlist/${authid}/${productId}`);
+          await axios.delete(`http://localhost:8000/api/cart/cart/${authid}/${productId}`);
           fetchproduct();
         } catch (error) {
-          console.error('Error deleting product from wishlist:', error);
+          console.error('Error deleting product from cart:', error);
         }
       };
 
-    useEffect(() => {
+     useEffect(() => {
         const authid= localStorage.getItem('authid')
         if(!authid){
           navigate('/login')
@@ -40,10 +41,11 @@ function Wishlist() {
 
     const [product,setproduct]= useState([])
     const fetchproduct=async()=>{
-        const res=await axios.get(`http://localhost:8000/api/wishlist/getwishlistbyuserid/${localStorage.getItem('authid')}`)
+        const res=await axios.get(`http://localhost:8000/api/cart/getcartbyuserid/${localStorage.getItem('authid')}`)
       setproduct(res.data)
       console.log(res.data)
     }
+
 
     useEffect(() => {
         fetchproduct()
@@ -54,9 +56,47 @@ function Wishlist() {
     navigate(`/ProductDetail?productId=${productId}`);
     };
 
+    const [count, setCount] = useState(1);
+
+  const handleIncrement = () => {
+    setCount((prevCount) => prevCount + 1);
+  };
+
+  const handleDecrement = () => {
+    if (count > 1) {
+      setCount((prevCount) => prevCount - 1);
+    }
+  };
+
+  const [selectedProducts, setSelectedProducts] = useState([]);
+
+  const handleCheckboxChange = (productId) => {
+    setSelectedProducts((prevSelectedProducts) =>
+      prevSelectedProducts.includes(productId)
+        ? prevSelectedProducts.filter((id) => id !== productId)
+        : [...prevSelectedProducts, productId]
+    );
+  };
+
+  const handleCheckboxClick = (productId) => {
+    setSelectedRows((prevSelectedRows) => {
+      if (prevSelectedRows.includes(productId)) {
+        // If the product is already selected, remove it from the selection
+        return prevSelectedRows.filter((id) => id !== productId);
+      } else {
+        // If the product is not selected, add it to the selection
+        return [...prevSelectedRows, productId];
+      }
+    });
+  };
+
+  const orderclick = () => {
+    navigate(`/Checkout`);
+    };
+
   return (
     <div>
-        <div>
+            <div>
             <meta charSet="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <title>New2U</title>
@@ -130,27 +170,64 @@ function Wishlist() {
             </div>
         </div>
         <div>
-            <div className='wishlisthead'>
-                <h1>
-                    <BsFillBookmarkHeartFill className='wishlistheadicon' size={52} color="red" />
-               My Wishlist</h1>
+        <div className='cardcart'>
+          <div>
+            <div className='carthead'>
+              <h1>
+                <HiShoppingCart className='cartheadicon' size={52} color='red' />
+                My cart
+              </h1>
             </div>
-            <div >
-                <div className='cardbox'>
-        {product.map((wishlist, index) => (
-          <div className='cards' key={index} onClick={() => handleCardClick(wishlist.productDetails._id)}>
-            <img className='card-img-top' src={`http://localhost:8000/${wishlist.productDetails.image}`} alt='Card' style={{ height: '250px' }} />
-            <div className='card-body'>
-              <h5 className='card-title'>{wishlist.productDetails.productName}</h5>
-              <p className='card-text'>{wishlist.productDetails.price}</p>
+            <div>
+              <table className='cart_table'>
+                {product.map((cart, index) => (
+              <tr
+                key={index}
+                className={`cart_tr ${
+                  selectedRows.includes(cart.productDetails._id) ? 'selected' : ''
+                }`}
+              >
+                <td className='cart_checkbox'>
+                  <input
+                    type='checkbox'
+                    checked={selectedRows.includes(cart.productDetails._id)}
+                    onChange={() => handleCheckboxClick(cart.productDetails._id)}
+                  />
+                </td>
+                    <td></td>
+                    <td className='dummy' onClick={() => handleCardClick(cart.productDetails._id)}>
+                      <img
+                        className='cart_image'
+                        src={`http://localhost:8000/${cart.productDetails.image}`}
+                        style={{ height: '70px', width: '80px' }}
+                      />
+                    </td>
+                    <td className='cart_name' onClick={() => handleCardClick(cart.productDetails._id)}>
+                      {cart.productDetails.productName}
+                    </td>
+                    <td className='cart_counter'>
+                      <button class='box_left-box' onClick={handleDecrement}>
+                        -
+                      </button>
+                      <span class='box_center-box'>{count}</span>
+                      <button class='box_right-box' onClick={handleIncrement}>
+                        +
+                      </button>
+                    </td>
+                    <td className='cart_price'>{cart.productDetails.price}</td>
+                    <td className='deleteicon'>
+                      <MdDelete size={24} onClick={() => deleteProduct(cart.productDetails._id)} />
+                    </td>
+                  </tr>
+                ))}
+              </table>
             </div>
           </div>
-        ))}
-      </div>
-            </div>
         </div>
+      </div>
+      <button className="button-25" role="button" onClick={orderclick}>Order</button>
     </div>
-  )
+  );
 }
 
-export default Wishlist
+export default Cart;

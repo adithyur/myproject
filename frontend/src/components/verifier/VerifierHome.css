@@ -1,0 +1,118 @@
+.fullverifier{
+    background-image: url(/images/bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 1000px;
+    display: flex;
+    color: white;
+}
+
+.sideoption{
+    
+    width: 200px;
+    height: 100%;
+    flex-basis: 15%;
+    background-color: #161615;
+}
+
+.verifierbody{
+    flex-basis: 85%;
+}
+
+/*.verifierhomedashtd:hover{
+    background: hsla(0, 100%, 3%, 1);
+
+    background: radial-gradient(circle, hsla(0, 100%, 3%, 1) 0%, hsla(312, 33%, 39%, 1) 48%, hsla(0, 93%, 53%, 1) 100%);
+
+    background: -moz-radial-gradient(circle, hsla(0, 100%, 3%, 1) 0%, hsla(312, 33%, 39%, 1) 48%, hsla(0, 93%, 53%, 1) 100%);
+
+    background: -webkit-radial-gradient(circle, hsla(0, 100%, 3%, 1) 0%, hsla(312, 33%, 39%, 1) 48%, hsla(0, 93%, 53%, 1) 100%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#0F0000", endColorstr="#864379", GradientType=1 );
+}*/
+
+.verifierhomedashtd:hover{
+    background: linear-gradient(90deg, rgba(0,2,11,1) 0%, rgba(187,55,82,1) 100%);
+    transition: color 3s;
+}
+
+.verifierhomedashtd{
+    height: 80px;
+    border-bottom-width: 0.01px;
+    border-bottom-style: ridge;
+    font-weight: 500;
+    text-align: left;
+    padding-left: 30px;
+    
+}
+
+.dashtxt{
+    text-decoration: none;
+    color: white;
+    padding-left: 5px;
+    
+}
+
+.verifierhomedashtd1{
+    height: 80px;
+    border-bottom-width: 0.01px;
+    border-bottom-style: ridge;
+    font-weight: 500;
+    text-align: left;
+    padding-left: 30px;
+    
+    
+}
+
+.verifierdashdiv{
+    background: linear-gradient(90deg, rgba(0,2,11,1) 0%, rgba(187,55,82,1) 100%);
+    height: 50px;
+    text-align: left;
+    padding-top: 15px;
+    margin-top: 10px;
+}
+
+.verifierdashdiv1:hover{
+    background: linear-gradient(90deg, rgba(0,2,11,1) 0%, rgba(187,55,82,1) 100%);
+    height: 50px;
+    text-align: left;
+    padding-top: 15px;
+    margin-top: 10px;
+}
+
+.verifierdashdiv2:hover{
+    background: linear-gradient(90deg, rgba(0,2,11,1) 0%, rgba(187,55,82,1) 100%);
+    height: 50px;
+    text-align: left;
+    padding-top: 15px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.verifierhomedashtd2{
+    height: 80px;
+    border-bottom-width: 0.01px;
+    border-bottom-style: ridge;
+    font-weight: 500;
+    text-align: left;
+    padding-left: 30px;
+    
+}
+
+.verifierbody1{
+    border-color: red;
+    background-color: aqua;
+    border-radius: 50px;
+    border-width: 1px;
+    width: 500px;
+    margin-top: 300px;
+    margin-left: 500px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.verifierbodyicon1, .verifierbodyicon2{
+    display: flex;
+    flex-direction: row;
+}

@@ -16,7 +16,20 @@ import Category from './components/category';
 import ViewProduct from './components/user/ViewProduct';
 import ProductDetail from './components/ProductDetail';
 import Wishlist from './components/user/Wishlist';
+import Cart from './components/user/Cart';
+import Checkout from './components/user/Checkout';
 
+
+import AdminHome from './components/admin/AdminHome';
+import ViewUser from './components/admin/ViewUser';
+
+
+import VerifierHome from './components/verifier/VerifierHome';
+import ApproveProduct from './components/verifier/ApproveProduct';
+import ViewOrders from './components/verifier/ViewOrders';
+
+
+import Rohit from './components/user/Rohit';
 
 function App() {
   return (
@@ -33,6 +46,19 @@ function App() {
           <Route path='/ViewProduct' element={<ViewProduct/>}/>
           <Route path='/ProductDetail' element={<ProductDetail/>}/>
           <Route path='/Wishlist' element={<Wishlist/>}/>
+          <Route path='/Cart' element={<Cart/>}/>
+          <Route path='/Checkout' element={<Checkout/>}/>
+
+          
+          <Route path='AdminHome' element={<AdminHome/>}/>
+          <Route path='ViewUser' element={<ViewUser/>}/>
+
+
+          <Route path='VerifierHome' element={<VerifierHome/>}/>
+          <Route path='ApproveProduct' element={<ApproveProduct/>}/>
+          <Route path='ViewOrders' element={<ViewOrders/>}/>
+
+          <Route path='/Rohit' element={<Rohit/>}/>
         </Routes>
       </Router>
     </div>

@@ -69,7 +69,7 @@ function UserNav() {
             
             <li className="nav-item">
             <div className="gradient-text">
-              <a className="nav-link" href="#">
+              <a className="nav-link" href="/Cart">
                 <i className="fa fa-shopping-cart" /> Cart
               </a>
             </div>
