@@ -8,6 +8,15 @@ function Checkout() {
 
         const [formFields, setFormFields] = useState(['']);
         const [product, setProduct] = useState([]);
+        const [bio, setBio]= useState({fname:'',
+                                      mobile1:'',
+                                      pincode:'',
+                                      place:'',
+                                      Address:'',
+                                      city:'',
+                                      state:'',
+                                      Landmark:'',
+                                      mobile2:''});
         
         const logout = () => {
             localStorage.removeItem('authid')
@@ -33,6 +42,34 @@ function Checkout() {
         useEffect(() => {
           fetchProducts()
       },[])
+
+      const fetchBio = async () => {
+        try {
+          const res = await axios.get(`http://localhost:8000/api/profile/profile/${localStorage.getItem('authid')}`);
+          if(res){
+            setBio({fname:res.data.fname,
+          mobile1:res.data.fname,
+          pincode:res.data.pincode,
+          place:res.data.lname,
+          Address:res.data.address,
+          city:res.data.city,
+          state:res.data.state,
+          Landmark:res.data.mobile2,
+          mobile2:res.data.mobile1});
+        console.log(res)}
+
+          else{
+            alert("thenj poyi gooyis")
+          }
+          
+          console.log('profile',bio);
+        } catch (error) {
+          console.error('Error fetching profile:', error);
+        }
+      };
+      useEffect(() => {
+        fetchBio()
+    },[])
 
   return (
     <div>
@@ -119,17 +156,18 @@ function Checkout() {
                   <label className="fname">First Name*</label>
                   <input className="checktxt" 
                     type="text" 
-                    placeholder="1st name"
+                    
                     name="fname"
-
+                    value={bio.fname}
                   />
                 </div>
                 <div className='checkform2'>
                   <label className="fname">Mobile Number*</label>
                   <input className="checktxt" 
                     type="text" 
-                    placeholder="phone number1"
+                    
                     name="mobile1"
+                    value={bio.mobile1}
 
                   />
                 </div>
@@ -141,6 +179,7 @@ function Checkout() {
                     type="text" 
                     placeholder="pincode"
                     name="pincode"
+                    value={bio.pincode}
 
                   />
                 </div>
@@ -150,7 +189,7 @@ function Checkout() {
                     type="text" 
                     placeholder="place"
                     name="place"
-
+                    value={bio.fname}
                   />
                 </div>
                 </div>
@@ -161,7 +200,7 @@ function Checkout() {
                     placeholder="Address"
                     name="Address"
                     rows="4" cols="1"
-
+                    value={bio.fname}
                   />
                 </div>
                 <div className='vertical3'>
@@ -171,6 +210,7 @@ function Checkout() {
                     type="text" 
                     placeholder="City"
                     name="City"
+                    value={bio.city}
 
                   />
                 </div>
@@ -180,7 +220,7 @@ function Checkout() {
                     type="text" 
                     placeholder="State"
                     name="State"
-
+                    value={bio.state}
                   />
                 </div>
                 </div>
@@ -191,7 +231,7 @@ function Checkout() {
                     type="text" 
                     placeholder="Landmark"
                     name="Landmark"
-
+                    value={bio.state}
                   />
                 </div>
                 <div className='checkform9'>
@@ -200,7 +240,7 @@ function Checkout() {
                     type="text" 
                     placeholder="mobile2"
                     name="mobile2"
-
+                    value={bio.mobile1}
                   />
                 </div>
                 </div>

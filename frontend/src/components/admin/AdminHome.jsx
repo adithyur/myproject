@@ -26,9 +26,9 @@ function AdminHome() {
               </tr>
               <tr>
                 <td className='admindashtd1'>
-                <div className='admindashdiv1'>
+                <div href='ViewUser'className='admindashdiv1'>
                 <FaUsers style={{fontSize: '22'}}/>
-                <a href='ViewUser' className='dashtxt' style={{marginLeft:'5px'}}>MANAGE USER</a>
+                <a href='ViewUser' className='dashtxt' style={{marginLeft:'5px', width:'100%'}}>MANAGE USER</a>
                 </div>
               </td>
               </tr>

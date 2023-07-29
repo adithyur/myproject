@@ -30,9 +30,22 @@ function Example() {
       if( response){
 
       localStorage.setItem('authid',response.data._id)
+      localStorage.setItem('authrole',response.data.role)
       setFormData({ email: '', password: ''});
-      alert("Login successfully")
-      navigate('/UserHome')
+      if(response.data.role==='user'){
+        alert("Login successfully")
+        navigate('/UserHome')
+      }
+      else if(response.data.role==='verifier')
+      {
+        alert("Login successfully")
+        navigate('/VerifierHome')
+      }
+      else{
+        alert("Login successfully")
+        navigate('/AdminHome')
+      }
+
 
       }
     }

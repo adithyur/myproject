@@ -98,6 +98,18 @@ const ProductDetail = () => {
     }
   }, [productId]);
 
+  const handleShare = async (pId,pName) => {
+    try {
+      await navigator.share({
+        title: pName,
+        url: `http://localhost:3000/ProductDetail?productId==${pId}`,
+      });
+      console.log('Shared successfully');
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+  };
+
   return (
     <div>
       <div>
@@ -174,7 +186,7 @@ const ProductDetail = () => {
       </div>
         <div className='sharecartwishlist'>
 
-          <a className='share-button' href='/share'>
+          <a className='share-button' onClick={()=> {handleShare(product._id, product.productName)}}>
           <IoArrowRedoCircle style={{ marginRight: '5px', fontSize: '26px' }}/>
           Share
           </a> 

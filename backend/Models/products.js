@@ -34,6 +34,11 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    status: {
+        type: String,
+        enum: ['verified', 'unverified', 'rejected'],
+        default: 'unverified'
+    }
 
 });
 

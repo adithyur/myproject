@@ -15,6 +15,8 @@ function ViewProduct() {
     const fetchproduct=async()=>{
       const res=await axios.get(`http://localhost:8000/api/products/getproductbyuserid/${localStorage.getItem('authid')}`)
       setproduct(res.data)
+      console.log(res.data)
+      console.log(res.data.productName)
     }
   
     useEffect(() => {

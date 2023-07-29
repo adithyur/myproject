@@ -13,4 +13,17 @@ router.post('/profile', async (req, res) => {
     }
   }); 
 
+  router.get('/profile/:userid', async(req, res) => {
+    try{
+      const {userid}= req.params;
+      const profile=await Profile.find({userid:userid})
+      res.status(201).json({profile});
+  }
+  catch (error) {
+    console.error('Error getting profile:', error);
+    res.status(500).json({ message: error });
+  }
+    }
+  )
+
   module.exports = router;
