@@ -6,17 +6,18 @@ import "./Checkout.css"
 
 function Checkout() {
 
-        const [formFields, setFormFields] = useState(['']);
+        const authid= localStorage.getItem('authid')
         const [product, setProduct] = useState([]);
-        const [bio, setBio]= useState({fname:'',
-                                      mobile1:'',
-                                      pincode:'',
-                                      place:'',
-                                      Address:'',
-                                      city:'',
-                                      state:'',
-                                      Landmark:'',
-                                      mobile2:''});
+        const [bio, setBio]= useState({ name:'',
+                                        mobile1:'',
+                                        pincode:'',
+                                        place:'',
+                                        address:'',
+                                        city:'',
+                                        state:'',
+                                        landmark:'',
+                                        mobile2:''
+                                     });
         
         const logout = () => {
             localStorage.removeItem('authid')
@@ -34,7 +35,7 @@ function Checkout() {
           try {
             const res = await axios.get(`http://localhost:8000/api/cart/getcartbyuserid/${localStorage.getItem('authid')}`);
             setProduct(res.data);
-            console.log(res.data);
+            /*console.log(res.data);*/
           } catch (error) {
             console.error('Error fetching products:', error);
           }
@@ -46,23 +47,26 @@ function Checkout() {
       const fetchBio = async () => {
         try {
           const res = await axios.get(`http://localhost:8000/api/profile/profile/${localStorage.getItem('authid')}`);
+          /*setFormFields(res.data)
+          console.log(formFields)*/
           if(res){
-            setBio({fname:res.data.fname,
-          mobile1:res.data.fname,
-          pincode:res.data.pincode,
-          place:res.data.lname,
-          Address:res.data.address,
-          city:res.data.city,
-          state:res.data.state,
-          Landmark:res.data.mobile2,
-          mobile2:res.data.mobile1});
-        console.log(res)}
+            setBio({name:res.data[0].name,
+          mobile1:res.data[0].mobile1,
+          pincode:res.data[0].pincode,
+          place:res.data[0].place,
+          address:res.data[0].address,
+          city:res.data[0].city,
+          state:res.data[0].state,
+          landmark:res.data[0].landmark,
+          mobile2:res.data[0].mobile2});
+
+        console.log(res.data[0].fname)}
 
           else{
             alert("thenj poyi gooyis")
           }
           
-          console.log('profile',bio);
+          /*console.log('profile',bio);*/
         } catch (error) {
           console.error('Error fetching profile:', error);
         }
@@ -70,6 +74,33 @@ function Checkout() {
       useEffect(() => {
         fetchBio()
     },[])
+
+    const handlechange = (e) => {
+      const { name, value, type } = e.target;
+      setBio((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (bio.mobile1===bio.mobile2){
+        alert("use different mobile number as secondary")
+        }
+      else{
+        console.log(bio)
+        await axios.post(`http://localhost:8000/api/profile/update/${localStorage.getItem('authid')}`, bio)
+        alert("Address Added successfully");
+      }
+     
+    } catch (error) {
+      console.error('Error adding Address:', error);
+      alert("Error adding Address:");
+    }
+  };
+
 
   return (
     <div>
@@ -149,26 +180,25 @@ function Checkout() {
         <div className='checkbody'>
           <div className='subcheckbody'>
             <div className='checkformdiv'>
-              <form className='checkform'>
+              <form className='checkform' onSubmit={handleSubmit}>
 
                 <div className='vertical1'>
                   <div className='checkform1'>
-                  <label className="fname">First Name*</label>
+                  <label className="fname">Name*</label>
                   <input className="checktxt" 
                     type="text" 
-                    
-                    name="fname"
-                    value={bio.fname}
+                    name="name"
+                    value={bio.name}
+                    onChange={handlechange}
                   />
                 </div>
                 <div className='checkform2'>
                   <label className="fname">Mobile Number*</label>
                   <input className="checktxt" 
                     type="text" 
-                    
                     name="mobile1"
                     value={bio.mobile1}
-
+                    onChange={handlechange}
                   />
                 </div>
                 </div>
@@ -180,7 +210,7 @@ function Checkout() {
                     placeholder="pincode"
                     name="pincode"
                     value={bio.pincode}
-
+                    onChange={handlechange}
                   />
                 </div>
                 <div className='checkform4'>
@@ -189,7 +219,8 @@ function Checkout() {
                     type="text" 
                     placeholder="place"
                     name="place"
-                    value={bio.fname}
+                    value={bio.place}
+                    onChange={handlechange}
                   />
                 </div>
                 </div>
@@ -200,7 +231,8 @@ function Checkout() {
                     placeholder="Address"
                     name="Address"
                     rows="4" cols="1"
-                    value={bio.fname}
+                    value={bio.address}
+                    onChange={handlechange}
                   />
                 </div>
                 <div className='vertical3'>
@@ -211,7 +243,7 @@ function Checkout() {
                     placeholder="City"
                     name="City"
                     value={bio.city}
-
+                    onChange={handlechange}
                   />
                 </div>
                 <div className='checkform7'>
@@ -221,6 +253,7 @@ function Checkout() {
                     placeholder="State"
                     name="State"
                     value={bio.state}
+                    onChange={handlechange}
                   />
                 </div>
                 </div>
@@ -230,8 +263,9 @@ function Checkout() {
                   <input className="checktxt" 
                     type="text" 
                     placeholder="Landmark"
-                    name="Landmark"
-                    value={bio.state}
+                    name="landmark"
+                    value={bio.landmark}
+                    onChange={handlechange}
                   />
                 </div>
                 <div className='checkform9'>
@@ -240,11 +274,12 @@ function Checkout() {
                     type="text" 
                     placeholder="mobile2"
                     name="mobile2"
-                    value={bio.mobile1}
+                    value={bio.mobile2}
+                    onChange={handlechange}
                   />
                 </div>
                 </div>
-                <button className="button-65" role="button">Save & Delivery here</button>
+                <button className="button-65" type="submit">Save & Delivery here</button>
               </form>
             </div>
             <div className='cartdiv'>
@@ -269,7 +304,7 @@ function Checkout() {
             ))}
           </div>
           <h2 style={{paddingTop:'20px'}}> TOTAL ₹ 10298 </h2><br/>
-          <button className="button-37" role="button">Check Out</button>
+          <button className="button-37" type="submit">Check Out</button>
           
       </div>
     </div>

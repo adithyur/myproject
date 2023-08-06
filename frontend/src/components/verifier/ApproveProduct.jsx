@@ -11,15 +11,39 @@ import { Button } from 'bootstrap';
 function ApproveProduct() {
 
 
-    const [product,setproduct]= useState([])
-    const fetchproduct=async()=>{
-    const res=await axios.get(`http://localhost:8000/api/products/getproduct`)
-    setproduct(res.data)
-    }
+    const [product,setProduct]= useState([]);
+    const [selectedProduct, setSelectedProduct] = useState([]);
 
+    const fetchUnverifiedProducts = async () => {
+      try {
+        const res = await axios.post('http://localhost:8000/api/products/unproducts');
+        setProduct(res.data);
+        console.log(res.data);
+      } catch (error) {
+        console.error('Error fetching unverified products:', error);
+      }
+    };
+  
     useEffect(() => {
-        fetchproduct()
-    }, [product])
+      fetchUnverifiedProducts();
+    }, []);
+
+    const handleApprove = async (selectedProduct) => {
+      if (selectedProduct) {
+        console.log(selectedProduct);
+        try {
+          const updatedProduct = { ...selectedProduct, status: 'verified' };
+          await axios.put(`http://localhost:8000/api/products/unupdate/${selectedProduct}`, updatedProduct);
+          // Product status updated to 'verified', now you can refetch the unverified products
+          fetchUnverifiedProducts();
+        } catch (error) {
+          console.error('Error approving product:', error);
+        }
+      } else {
+        // Handle the case where no product is selected
+        console.log('No product selected for approval');
+      }
+    };
 
 
 
@@ -97,25 +121,25 @@ function ApproveProduct() {
         </tr>
       </thead>
       <tbody>
-          <tr className='verifier_table_tr'>
+      {product && product.map((details, index) => (
+          <tr className='verifier_table_tr' key={index}>
             <td className='verifierproduct_td'>
-                <input type='checkbox'/>
+              <button className="button-24" role="button" onClick={() => handleApprove(details._id)}>Approve</button>
             </td>
-            <td className='verifierproduct_td'>648b618e8cd8cafefda3b467</td>
-            <td className='verifierproduct_td'>Nothing Ear 2</td>
-            <td className='verifierproduct_td'>₹9,999</td>
-            <td className='verifierproduct_td'>Headset</td>
-            <td className='verifierproduct_td'>Bluetooth Headset</td>
-            <td className='verifierproduct_td'>Nothing</td>
+            <td className='verifierproduct_td'>{details.userid}</td>
+            <td className='verifierproduct_td'>{details.productName}</td>
+            <td className='verifierproduct_td'>{details.price}</td>
+            <td className='verifierproduct_td'>{details.productType}</td>
+            <td className='verifierproduct_td'>{details.category}</td>
+            <td className='verifierproduct_td'>{details.brand}</td>
             <td>
-              <img src='https://rukminim2.flixcart.com/image/416/416/xif0q/headphone/x/m/v/-original-imagnydghgvy9huf.jpeg?q=70' alt="Product" style={{ height: '50px' }} />
+              <img src={`http://localhost:8000/${details.image}`} alt="Product" style={{ height: '50px' }} />
             </td>
           </tr>
-
+          ))}
       </tbody>
     </table>
 
-    <button className="button-24" role="button">Approve</button>
 
     <button className="button-124" role="button">DECLINE</button>
 

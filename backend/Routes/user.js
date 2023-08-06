@@ -33,5 +33,17 @@ router.post('/reguser', async (req, res) => {
       }
 
     });
+
+    router.get('/getdetail/:userid',async(req,res)=>{
+      try{
+          const{userid}=req.params;
+          const user=await User.find({userid})
+          res.status(201).json(user);
+      }
+      catch (error) {
+        console.error('Error getting user:', error);
+        res.status(500).json({ message: error });
+      }
+    })
     
   module.exports = router;

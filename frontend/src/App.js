@@ -14,6 +14,7 @@ import ProductManagement from './components/user/ProductManagement';
 import Profile from './components/user/Profile';
 import Category from './components/category';
 import ViewProduct from './components/user/ViewProduct';
+import EdtProduct from './components/user/EdtProduct';
 import ProductDetail from './components/ProductDetail';
 import Wishlist from './components/user/Wishlist';
 import Cart from './components/user/Cart';
@@ -44,6 +45,7 @@ function App() {
           <Route path='/Profile' element={<Profile/>}/>
           <Route path='/Category' element={<Category/>}/>
           <Route path='/ViewProduct' element={<ViewProduct/>}/>
+          <Route path='/EdtProduct' element={<EdtProduct/>}/>
           <Route path='/ProductDetail' element={<ProductDetail/>}/>
           <Route path='/Wishlist' element={<Wishlist/>}/>
           <Route path='/Cart' element={<Cart/>}/>

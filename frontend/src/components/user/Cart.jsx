@@ -56,17 +56,38 @@ function Cart() {
     navigate(`/ProductDetail?productId=${productId}`);
     };
 
-    const [count, setCount] = useState(1);
+  const [productCount, setProductCount] = useState({});
 
-  const handleIncrement = () => {
-    setCount((prevCount) => prevCount + 1);
+  const initializeProductCount = (cartItems) => {
+    const initialCount = {};
+    cartItems.forEach((cart) => {
+      initialCount[cart.productDetails._id] = 1; // Set the initial count to 1 for each product
+    });
+    setProductCount(initialCount);
   };
 
-  const handleDecrement = () => {
-    if (count > 1) {
-      setCount((prevCount) => prevCount - 1);
+  const handleIncrement = (productId) => {
+    setProductCount((prevCounts) => ({
+      ...prevCounts,
+      [productId]: (prevCounts[productId] || 0) + 1,
+    }));
+  };
+  
+  const handleDecrement = (productId) => {
+    if (productCount[productId] > 1) {
+      setProductCount((prevCounts) => ({
+        ...prevCounts,
+        [productId]: prevCounts[productId] - 1,
+      }));
     }
   };
+  
+
+  const getTotalPrice = (id,price) => {
+    const count = productCount[id] || 1;
+    return price * count;
+  };
+  
 
   const [selectedProducts, setSelectedProducts] = useState([]);
 
@@ -90,9 +111,25 @@ function Cart() {
     });
   };
 
-  const orderclick = () => {
-    navigate(`/Checkout`);
-    };
+  const orderclick = async () => {
+
+    const cartItems = product;
+    const orders = cartItems.map((cartItem) => ({
+      userid: localStorage.getItem('authid'),
+      productid: cartItem.productDetails._id,
+      quantity: productCount[cartItem.productDetails._id] || 1,
+      price: cartItem.productDetails.price,
+    }));
+  
+    try {
+      const res = await axios.post('http://localhost:8000/api/order/chumma', orders);
+      console.log('Orders placed:', res.data);
+      navigate('/OrderConfirmation');
+    } catch (error) {
+      console.error('Error placing orders:', error);
+    }
+  };
+
 
   return (
     <div>
@@ -206,15 +243,16 @@ function Cart() {
                       {cart.productDetails.productName}
                     </td>
                     <td className='cart_counter'>
-                      <button class='box_left-box' onClick={handleDecrement}>
+                      <button class='box_left-box' onClick={() => handleDecrement(cart.productDetails._id, cart.productDetails.price)}>
                         -
                       </button>
-                      <span class='box_center-box'>{count}</span>
-                      <button class='box_right-box' onClick={handleIncrement}>
+                      <span class="box_center-box">{productCount[cart.productDetails._id] || 1}</span>
+                      <button class='box_right-box' onClick={() => handleIncrement(cart.productDetails._id, cart.productDetails.price)}>
                         +
                       </button>
                     </td>
-                    <td className='cart_price'>{cart.productDetails.price}</td>
+                    <td className='cart_price'>₹{getTotalPrice(cart.productDetails._id, cart.productDetails.price)}
+                    </td>
                     <td className='deleteicon'>
                       <MdDelete size={24} onClick={() => deleteProduct(cart.productDetails._id)} />
                     </td>

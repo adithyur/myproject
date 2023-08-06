@@ -4,11 +4,10 @@ const Order = require('../Models/order');
 const products = require('../Models/products');
 const path = require('path');
 
-router.post('/order', async (req, res) => {
+router.post('/chumma', async (req, res) => {
     try {
-      const { userid, productid, quantity } = req.body;
-  
-      const order = new Order({ userid, productid, quantity });
+      const { userid, productid, quantity, price, name,mobile1,pincode,place,address,city,state,landmark,mobile2 } = req.body;
+      const order = new Order({ userid, productid, quantity, price, name,mobile1,pincode,place,address,city,state,landmark,mobile2 });
       await order.save();
   
       res.status(201).json(order);

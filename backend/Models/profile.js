@@ -7,19 +7,23 @@ const profileSchema = mongoose.Schema({
         ref: 'User',
         required: true,
       },
-    fname: {
+    name: {
         type: String,
         required: true
     },
-    lname: {
+    mobile1: {
         type: String,
         required: true,
     },
-    address: {
+    pincode: {
         type: String,
         required: true
     },
-    pincode: {
+    place: {
+        type: String,
+        required: true
+    },
+    address: {
         type: String,
         required: true
     },
@@ -31,7 +35,7 @@ const profileSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    mobile1: {
+    landmark: {
         type: String,
         required: true
     },

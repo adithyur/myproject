@@ -13,7 +13,7 @@ export default function Homebody() {
 
   const fetchProduct = async () => {
     try {
-      const res = await axios.get('http://localhost:8000/api/products/getproduct');
+      const res = await axios.get('http://localhost:8000/api/products/veproducts');
       setProduct(res.data);
     } catch (error) {
       console.error('Error fetching products:', error);

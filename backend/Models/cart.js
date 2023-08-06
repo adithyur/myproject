@@ -11,6 +11,10 @@ const cartSchema = mongoose.Schema({
     ref: 'products',
     required: true,
   },
+  quantity: {
+    type: Number,
+    default: 1,
+  }
 });
 
 cartSchema.index({ userid: 1, productid: 1 }, { unique: true });

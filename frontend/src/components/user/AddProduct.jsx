@@ -38,7 +38,7 @@ export default function AddProduct() {
         productType: '',
         category: '',
         brand: '',
-        image: '',
+        image: null,
         description: ''
       });
       alert("Product Added successfully");
@@ -130,7 +130,6 @@ export default function AddProduct() {
         type="file"
         name="image"
         accept="image/*"
-        multiple
         onChange={handleChange}
         required
       />

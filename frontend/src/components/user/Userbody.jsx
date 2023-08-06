@@ -12,7 +12,7 @@ export default function Userbody() {
 
   const fetchproduct=async()=>{
     try{
-      const res=await axios.get(`http://localhost:8000/api/products/getproduct`)
+      const res=await axios.get(`http://localhost:8000/api/products/veproducts`)
       setproduct(res.data);
     } catch (error) {
       console.error('Error fetching products:', error);
