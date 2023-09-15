@@ -4,15 +4,21 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { HiShoppingCart } from 'react-icons/hi';
 import { MdDelete } from 'react-icons/md';
+import  NoIconNav from './NoIconNav'
 import "./UserNav.css";
 import "./Cart.css";
 
 function Cart() {
 
+    const authid = localStorage.getItem('authid');
     const [selectedRows, setSelectedRows] = useState([]);
+    const [selectedProducts, setSelectedProducts] = useState([]);
+    const [orderProducts, setOrderProducts] = useState([]); // List of products from order table
+    const [productCount, setProductCount] = useState({});
+    
+
 
     const deleteProduct = async (productId) => {
-        const authid = localStorage.getItem('authid');
         try {
           await axios.delete(`http://localhost:8000/api/cart/cart/${authid}/${productId}`);
           fetchproduct();
@@ -27,19 +33,11 @@ function Cart() {
           navigate('/login')
         }
     },[])
-    
-    const logout = () => {
-        localStorage.removeItem('authid')
-        navigate('/')
-    }
 
     const navigate=useNavigate()
-    const [isOpen, setIsOpen] = useState(false);
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
-    };
 
     const [product,setproduct]= useState([])
+
     const fetchproduct=async()=>{
         const res=await axios.get(`http://localhost:8000/api/cart/getcartbyuserid/${localStorage.getItem('authid')}`)
       setproduct(res.data)
@@ -56,7 +54,7 @@ function Cart() {
     navigate(`/ProductDetail?productId=${productId}`);
     };
 
-  const [productCount, setProductCount] = useState({});
+  
 
   const initializeProductCount = (cartItems) => {
     const initialCount = {};
@@ -66,31 +64,6 @@ function Cart() {
     setProductCount(initialCount);
   };
 
-  const handleIncrement = (productId) => {
-    setProductCount((prevCounts) => ({
-      ...prevCounts,
-      [productId]: (prevCounts[productId] || 0) + 1,
-    }));
-  };
-  
-  const handleDecrement = (productId) => {
-    if (productCount[productId] > 1) {
-      setProductCount((prevCounts) => ({
-        ...prevCounts,
-        [productId]: prevCounts[productId] - 1,
-      }));
-    }
-  };
-  
-
-  const getTotalPrice = (id,price) => {
-    const count = productCount[id] || 1;
-    return price * count;
-  };
-  
-
-  const [selectedProducts, setSelectedProducts] = useState([]);
-
   const handleCheckboxChange = (productId) => {
     setSelectedProducts((prevSelectedProducts) =>
       prevSelectedProducts.includes(productId)
@@ -98,6 +71,55 @@ function Cart() {
         : [...prevSelectedProducts, productId]
     );
   };
+
+  const isProductSelected = (productId) => selectedProducts.includes(productId);
+
+  const orderclick = async () => {
+    const cartItems = product;
+    const selectedProduct = cartItems.find((cartItem) =>
+      isProductSelected(cartItem.productDetails._id)
+    );
+  
+    if (!selectedProduct) {
+      alert("Please select a product to order.");
+      return;
+    }
+  
+    const authid = localStorage.getItem('authid');
+    const productId = selectedProduct.productDetails._id;
+  
+    try {
+      const res = await axios.get(`http://localhost:8000/api/cart/quantity/${authid}/${productId}`);
+      const cartData = res.data;
+  
+      if (!cartData) {
+        console.error(`Cart data not found for product: ${productId}`);
+        return;
+      }
+  
+      const order = {
+        userid: authid,
+        productid: productId,
+        sellerid: selectedProduct.productDetails.sellerid,
+        quantity: cartData.quantity,
+        price: selectedProduct.productDetails.price,
+        total: cartData.total,
+      };
+  
+      console.log(`Quantity for product ${productId}: ${cartData.quantity}`);
+      console.log('Selected Order:', order);
+  
+      // Place your order with the selected product
+      const orderRes = await axios.post(`http://localhost:8000/api/order/place`, [order]);
+      console.log('Order placed:', orderRes.data);
+  
+      // Now, navigate to the checkout or payment page as needed
+      navigate('/Checkout');
+    } catch (error) {
+      console.error('Error placing order:', error);
+    }
+  };
+  
 
   const handleCheckboxClick = (productId) => {
     setSelectedRows((prevSelectedRows) => {
@@ -111,102 +133,77 @@ function Cart() {
     });
   };
 
-  const orderclick = async () => {
-
-    const cartItems = product;
-    const orders = cartItems.map((cartItem) => ({
-      userid: localStorage.getItem('authid'),
-      productid: cartItem.productDetails._id,
-      quantity: productCount[cartItem.productDetails._id] || 1,
-      price: cartItem.productDetails.price,
-    }));
-  
+  const fetchOrderProducts = async () => {
     try {
-      const res = await axios.post('http://localhost:8000/api/order/chumma', orders);
-      console.log('Orders placed:', res.data);
-      navigate('/OrderConfirmation');
+      const res = await axios.get(`http://localhost:8000/api/order/user/${localStorage.getItem('authid')}`);
+      setOrderProducts(res.data);
     } catch (error) {
-      console.error('Error placing orders:', error);
+      console.error('Error fetching order products:', error);
     }
   };
+
+  useEffect(() => {
+    fetchproduct();
+    fetchOrderProducts(); // Fetch products from order table
+  }, []);
+
+  const isProductInOrder = (productId) => {
+    return orderProducts.some((product) => product.productid === productId);
+  };
+
+  const incrementQuantity = async (productId,e ) => {
+    e.preventDefault();
+    try {
+      const authid = localStorage.getItem('authid');
+      const res = await axios.get(`http://localhost:8000/api/cart/increment/${authid}/${productId}`);
+      const updatedCart = res.data.cart;
+      console.log("quantity : ", updatedCart.quantity);
+      console.log("productid : ",productId)
+      console.log("authid : ",authid)
+      fetchproduct();
+    } catch (error) {
+      console.error('Error incrementing quantity:', error);
+    }
+  };
+
+  const decrementQuantity = async (productId,e ) => {
+    e.preventDefault();
+    try {
+      const authid = localStorage.getItem('authid');
+      const res = await axios.get(`http://localhost:8000/api/cart/decrement/${authid}/${productId}`);
+      const updatedCart = res.data.cart;
+      console.log("quantity : ", updatedCart.quantity);
+      console.log("productid : ",productId)
+      console.log("authid : ",authid)
+      fetchproduct();
+      
+    } catch (error) {
+      console.error('Error decrementing quantity:', error);
+    }
+  };
+
+  const deleteOrders = async () => {
+    try {
+      await axios.delete(`http://localhost:8000/api/order/delete/${localStorage.getItem('authid')}`, {
+        params: { status: 'waiting for confirmation' },
+      });
+      console.log('Orders with status "waiting for confirmation" deleted.');
+    } catch (error) {
+      console.error('Error deleting orders:', error);
+    }
+  };
+
+  useEffect(() => {
+    deleteOrders();
+  }, []);
 
 
   return (
     <div>
-            <div>
-            <meta charSet="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <title>New2U</title>
-            <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" />
-            <link rel="stylesheet" href="style.css" />
-            <div className="main-navbar shadow-sm sticky-top">
-                <div className="top-navbar">
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
-                                <div className="gradient-text">
-                                    <a className="nav-link" href="/UserHome">
-                                    <h5 className="brand-name">New2U</h5>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="col-md-5 my-auto">
-                                <form role="search">
-                                <div className="input-group">
-                                    <input type="search" placeholder="Search your product" className="form-control" />
-                                    <span className="search-button">
-                                    <button className="search-button1" type="submit">
-                                    <i className="fa fa-search" />
-                                    </button>
-                                    </span> 
-                                </div>
-                                </form>
-                            </div>
-                            <div className="col-md-5 my-auto">
-                                <ul className="nav justify-content-end">
-                                <li className="nav-item">
-                                <div className="gradient-text">
-                                    <a className="nav-link" href="#">
-                                    <i className="fa fa-shopping-cart" /> Cart
-                                    </a>
-                                </div>
-                                </li>
-                                <li className="nav-item">
-                                <div className="gradient-text">
-                                    <a className="nav-link" href="#">
-                                    <i className="fa fa-heart" /> Wishlist
-                                    </a>
-                                </div>
-                                </li>
-                                <li className="nav-item">
-                                <div className="gradient-text">
-                                    <a className="nav-link" href="/login">
-                                    <i className="fa fa-user" /> My Account
-                                    </a>
-                                </div>
-                                </li>
-                                <li className="nav-item">
-                                    <div className={`dropdown ${isOpen ? 'open' : ''}`}>
-                                        <button className="dropdown-btn" onClick={toggleDropdown}>
-                                            Profile <i className="fa fa-caret-down" />
-                                        </button>
-                                    <div className="dropdown-content">
-                                        <a href="/Profile">My Profile</a>
-                                        <a href="#">Orders</a>
-                                        <a href="/ProductManagement">Products</a>
-                                        <a onClick={logout}>Logout</a>
-                                    </div>
-                                </div>
-                                </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div>
+      <div>
+        < NoIconNav/>
+      </div>
+      <div>
         <div className='cardcart'>
           <div>
             <div className='carthead'>
@@ -217,20 +214,19 @@ function Cart() {
             </div>
             <div>
               <table className='cart_table'>
-                {product.map((cart, index) => (
-              <tr
-                key={index}
-                className={`cart_tr ${
-                  selectedRows.includes(cart.productDetails._id) ? 'selected' : ''
-                }`}
-              >
-                <td className='cart_checkbox'>
-                  <input
-                    type='checkbox'
-                    checked={selectedRows.includes(cart.productDetails._id)}
-                    onChange={() => handleCheckboxClick(cart.productDetails._id)}
-                  />
-                </td>
+        {<tbody>
+          {product.map((cart, index) => (
+            <tr
+              key={index}
+              className={`cart_tr ${isProductSelected(cart.productDetails._id) ? 'selected' : ''}`}
+            >
+              <td className='cart_checkbox'>
+                <input
+                  type='checkbox'
+                  checked={isProductSelected(cart.productDetails._id)}
+                  onChange={() => handleCheckboxChange(cart.productDetails._id)}
+                />
+              </td>
                     <td></td>
                     <td className='dummy' onClick={() => handleCardClick(cart.productDetails._id)}>
                       <img
@@ -243,21 +239,22 @@ function Cart() {
                       {cart.productDetails.productName}
                     </td>
                     <td className='cart_counter'>
-                      <button class='box_left-box' onClick={() => handleDecrement(cart.productDetails._id, cart.productDetails.price)}>
+                      <button className='box_left-box' onClick={(e) => decrementQuantity(cart.productDetails._id, e)}>
                         -
                       </button>
-                      <span class="box_center-box">{productCount[cart.productDetails._id] || 1}</span>
-                      <button class='box_right-box' onClick={() => handleIncrement(cart.productDetails._id, cart.productDetails.price)}>
+                      <span className="box_center-box">{cart.quantity}</span>
+                      <button className='box_right-box' onClick={(e) => incrementQuantity(cart.productDetails._id, e)}>
                         +
                       </button>
                     </td>
-                    <td className='cart_price'>₹{getTotalPrice(cart.productDetails._id, cart.productDetails.price)}
+                    <td className='cart_price'>₹{cart.total}
                     </td>
                     <td className='deleteicon'>
                       <MdDelete size={24} onClick={() => deleteProduct(cart.productDetails._id)} />
                     </td>
                   </tr>
                 ))}
+          </tbody>}
               </table>
             </div>
           </div>

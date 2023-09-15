@@ -4,7 +4,7 @@ const Wishlist = require('../Models/wishlist');
 const products = require('../Models/products');
 const path = require('path');
 
-router.post('/wishlist', async (req, res) => {
+router.post('/add', async (req, res) => {
   try {
     const { userid, productid } = req.body;
     const existingWishlist = await Wishlist.findOne({ userid, productid });
@@ -22,7 +22,7 @@ router.post('/wishlist', async (req, res) => {
   }
 });
 
-router.delete('/wishlist/:userid/:productid', async (req, res) => {
+router.delete('/delete/:userid/:productid', async (req, res) => {
   try {
     const { userid, productid } = req.params;
     await Wishlist.deleteOne({ userid, productid });
@@ -68,4 +68,3 @@ router.get('/getwishlistbyuserid/:userid', async (req, res) => {
 
 
 module.exports = router;
-

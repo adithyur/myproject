@@ -1,5 +1,13 @@
-import React, { useState } from 'react';
-import "./UserNav.css"
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { FaSearch } from 'react-icons/fa';
+
+import { FaShoppingCart } from 'react-icons/fa';
+import { AiFillHeart } from 'react-icons/ai';
+import { FaUser } from 'react-icons/fa';
+
+
 import { CiMobile3 } from 'react-icons/ci';
 import {TbMotorbike} from 'react-icons/tb';
 import {BsCarFront} from 'react-icons/bs' ;
@@ -9,10 +17,14 @@ import {CgSmartHomeWashMachine} from 'react-icons/cg' ;
 import {FiWatch} from 'react-icons/fi' ;
 import {AiOutlineLaptop} from 'react-icons/ai';
 import {MdSportsSoccer} from 'react-icons/md' ;
-import { useNavigate } from "react-router-dom";
-import { useEffect } from 'react';
+
+import { BsToggles2 } from 'react-icons/bs';
+import "./UserNav.css"
+
 
 function UserNav() {
+
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     const authid= localStorage.getItem('authid')
@@ -30,161 +42,122 @@ function UserNav() {
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
       };
+
+      useEffect(() => {
+        const fetchUserName = async () => {
+          try {
+            console.log("user id : ",localStorage.getItem('authid'))
+            const res = await axios.get(`http://localhost:8000/api/user/getname/${localStorage.getItem('authid')}`);
+            const userData = res.data;
+    
+            if (userData && userData.username) {
+              setUserName(userData.username);
+            }
+          } catch (error) {
+            console.error('Error fetching user:', error);
+          }
+        };
+    
+        fetchUserName();
+      }, []);
+
   return (
     <div>
-<meta charSet="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>New2U</title>
-<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="style.css" />
-<div className="main-navbar shadow-sm sticky-top">
-  <div className="top-navbar">
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
-         <div className="gradient-text">
-          <a className="nav-link" href="/UserHome">
-          <h5 className="brand-name">New2U</h5>
-          </a>
-          </div>
+    <div style={{height:'80px', borderBottom:'1px solid rgb(225, 217, 217)', marginTop:'30px', marginLeft:'100px', display:'flex', marginRight:'100px',/*backgroundColor:'blanchedalmond'*/ }}>
+      <a className="pnav" style={{textAlign:'left', fontWeight:'bold', fontSize:'30px', fontFamily:'unset', paddingTop:'5px'}} href='/UserHome'>New2U</a>
+      <div className="navbar2">
+        <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'10px'}} onClick={()=>{navigate('/FreshProduct')}}>Fresh</div> 
+        <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px'}} onClick={()=>{navigate('/FreshProduct')}}>Refurbished</div>
+        <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px'}} onClick={()=>{navigate('/FreshProduct')}}>Both</div>
+        <div className="search-bar2">
+          <input className='navtext2'type="text" placeholder="Search your products" />
+          <button className='navbutton2'><FaSearch/></button>
         </div>
-        <div className="col-md-5 my-auto">
-          <form role="search">
-            <div className="input-group">
-              <input type="search" placeholder="Search your product" className="form-control" />
-              <span className="search-button">
-              <button className="search-button1" type="submit">
-                <i className="fa fa-search" />
-              </button>
-              </span>
-              
-              
-            </div>
-          </form>
-        </div>
-        
-        <div className="col-md-5 my-auto">
-          <ul className="nav justify-content-end">
-            
-            <li className="nav-item">
-            <div className="gradient-text">
-              <a className="nav-link" href="/Cart">
-                <i className="fa fa-shopping-cart" /> Cart
-              </a>
-            </div>
-            </li>
-            <li className="nav-item">
-            <div className="gradient-text">
-              <a className="nav-link" href="/Wishlist">
-                <i className="fa fa-heart" /> Wishlist
-              </a>
-            </div>
-            </li>
-            <li className="nav-item">
-            <div className="gradient-text">
-              <a className="nav-link" href="/Profile">
-                <i className="fa fa-user" /> My Account
-              </a>
-            </div>
-            </li>
-            <li className="nav-item">
-            <div className={`dropdown ${isOpen ? 'open' : ''}`}>
-      <button className="dropdown-btn" onClick={toggleDropdown}>
-        Profile <i className="fa fa-caret-down" />
-      </button>
-      <div className="dropdown-content">
-        <a href="/Profile">My Profile</a>
-        <a href="#">Orders</a>
-        <a href="/ProductManagement">Products</a>
-        <a onClick={logout}>Logout</a>
+      </div>
+      <div style={{display:'flex',textAlign:'left', marginLeft:'220px', marginTop:'15px'}}>    
+        <a style={{fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/Cart">
+          <FaShoppingCart size={22} className='pnav-icon'/>  Cart</a>
+
+        <a style={{paddingLeft:'25px', fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/Wishlist">
+          <AiFillHeart size={24} className='pnav-icon'/> Wishlist
+        </a>
+
+        <a style={{paddingLeft:'25px', fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/Profile">
+          <FaUser size={22} className='pnav-icon'/> {userName}
+        </a>
       </div>
     </div>
 
-            </li>
-          </ul>
+    <div style={{display:'flex', borderBottom:'1px solid rgb(225, 217, 217)',height: '100px',marginLeft:'100px',marginRight:'100px'}}>
+
+        <a onClick={()=>{navigate(`/UserCategory?category=${'mobile'}`)}} children="nav-item" className='homeicon'>
+          <CiMobile3 size={28}/>
+          <br></br>
+          <span>Mobile</span>
+        </a>
+        <a onClick={()=>{navigate(`/UserCategory?category=${'headphone'}`)}} children="nav-item" className='homeicon2'>
+          <MdHeadset size={28}/>
+          <br></br>
+          <span>Headphone</span>
+        </a>
+        
+        <a onClick={()=>{navigate(`/UserCategory?category=${'refridgerator'}`)}} className='homeicon2'>
+          <CgSmartHomeRefrigerator size={28}/>
+          <br></br>
+          <span>Refridgerator</span>
+        </a>
+
+        <a onClick={()=>{navigate(`/UserCategory?category=${'washing machine'}`)}} className='homeicon2'>
+          <CgSmartHomeWashMachine size={28}/>
+          <br></br>
+          <span>Washing machine</span>
+        </a>
+
+        <a onClick={()=>{navigate(`/UserCategory?category=${'bike'}`)}} className='homeicon2'>
+          <TbMotorbike size={28}/>
+          <br></br>
+          <span>Bike</span>
+        </a>
+
+        <a onClick={()=>{navigate(`/UserCategory?category=${'car'}`)}} className='homeicon2'>
+          <BsCarFront size={28}/>
+          <br></br>
+          <span>Car</span>
+        </a>
+
+        <a onClick={()=>{navigate(`/UserCategory?category=${'watches'}`)}} className='homeicon2'>
+          <FiWatch size={28}/>
+          <br></br>
+          <span>Watches</span>
+        </a>
+
+        <a onClick={()=>{navigate(`/UserCategory?category=${'computer'}`)}} className='homeicon2'>
+          <AiOutlineLaptop size={28}/>
+          <br></br>
+          <span>Computer</span>
+        </a>
+
+        <a onClick={()=>{navigate(`/UserCategory?category=${'tv'}`)}} className='homeicon2'>
+          <CiMobile3 size={28}/>
+          <br></br>
+          <span>Television</span>
+        </a>
+
+        <a onClick={()=>{navigate(`/UserCategory?category=${'sports'}`)}} className='homeicon2'>
+          <MdSportsSoccer size={28}/>
+          <br></br>
+          <span className="text">Sports</span>
+        </a>
+
+        <div className='filter'>
+          <p className='filterp'> <BsToggles2/>Filter</p>
         </div>
-      </div>
+        
+
     </div>
+
   </div>
-  <nav className="navbar navbar-expand-lg">
-    <div className="container-fluid">
-      <a className="navbar-brand d-block d-sm-block d-md-none d-lg-none" href="/UserHome">
-        New2U
-      </a>
-      <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span className="navbar-toggler-icon" />
-      </button>
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-          <li onClick={()=>{navigate(`/Category?category=${'mobile'}`)}} children="nav-item">
-          <a className="icon-container" >
-            <CiMobile3 className="icon"/>
-            <span className="text">Mobile</span>
-          </a>
-          </li>
-          <li onClick={()=>{navigate(`/Category?category=${'headset'}`)}} className="nav-item">
-          <a className="icon-container">
-            <MdHeadset className="icon"/>
-            <span className="text">Headphone</span>
-          </a>
-          </li>
-          <li onClick={()=>{navigate(`/Category?category=${'refridgerator'}`)}} className="nav-item">
-          <a className="icon-container">
-            <CgSmartHomeRefrigerator className="icon"/>
-            <span className="text">Refridgerator</span>
-          </a>
-          </li>
-          <li onClick={()=>{navigate(`/Category?category=${'washing machine'}`)}} className="nav-item">
-          <a className="icon-container">
-            <CgSmartHomeWashMachine className="icon"/>
-            <span className="text">Washing machine</span>
-          </a>
-          </li>
-          <li onClick={()=>{navigate(`/Category?category=${'bike'}`)}} className="nav-item">
-          <a className="icon-container">
-            <TbMotorbike className="icon"/>
-            <span className="text">Bike</span>
-          </a>
-          </li>
-          <li onClick={()=>{navigate(`/Category?category=${'car'}`)}} className="nav-item">
-          <a className="icon-container">
-            <BsCarFront className="icon"/>
-            <span className="text">Car</span>
-          </a>
-          </li>
-          <li onClick={()=>{navigate(`/Category?category=${'watches'}`)}} className="nav-item">
-          <a className="icon-container">
-            <FiWatch className="icon"/>
-            <span className="text">Watches</span>
-          </a>
-          </li>
-          <li onClick={()=>{navigate(`/Category?category=${'computer'}`)}} className="nav-item">
-          <a className="icon-container">
-            <AiOutlineLaptop className="icon"/>
-            <span className="text">Computer</span>
-          </a>
-          </li>
-          <li onClick={()=>{navigate(`/Category?category=${'tv'}`)}} className="nav-item">
-          <a className="icon-container">
-            <CiMobile3 className="icon"/>
-            <span className="text">Television</span>
-          </a>
-          </li>
-          <li onClick={()=>{navigate(`/Category?category=${'sports'}`)}} className="nav-item">
-          <a className="icon-container">
-            <MdSportsSoccer className="icon"/>
-            <span className="text">Sports</span>
-          </a>
-          </li>
-          
-        </ul>
-      </div>
-    </div>
-  </nav>
-</div>
-</div>
-  )
+)
 }
 
 export default UserNav

@@ -11,6 +11,8 @@ function Example() {
 
   const [formData, setFormData] = useState({ email: '', password: ''});
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     const fieldValue = value;
@@ -55,6 +57,10 @@ function Example() {
     
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
   return (
     <div className="loginc1">
     <div className="logincontainer1">
@@ -75,12 +81,16 @@ function Example() {
       <br/>
       <RiLockPasswordFill className="icon1"/>
       <input className="logint" 
-        type="password" 
+        type={showPassword ? 'text' : 'password'}
         placeholder="Password" 
         name="password" 
         value={formData.password}
         onChange={handleChange}
         required/>
+
+      <button onClick={toggleShowPassword} style={{borderWidth:'0px', backgroundColor:'transparent'}}>
+        {showPassword ? 'Hide' : '🙈'} 
+      </button>
       <br/>
       <br/>
       <div className="loginb">

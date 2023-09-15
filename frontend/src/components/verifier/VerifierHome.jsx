@@ -11,7 +11,9 @@ function VerifierHome() {
     <div className='fullverifier'>
         <div className='sideoption'>
           <div className='sideoption1'>
+          <a href='VerifierHome' style={{textDecoration:'none', color:'white'}}>
             <h1 style={{paddingTop:'20px'}}>New2U</h1>
+          </a>
             <table style={{width:'100%', marginTop:'40px'}}>
               <tr>
                 <td className='verifierhomedashtd1'>
@@ -38,16 +40,20 @@ function VerifierHome() {
                 </td>
               </tr>
               <tr>
-                <td className='verifierhomedashtd'>
+              <td className='verifierhomedashtd2'>
+                  <div className='verifierdashdiv2'>
                     <FaEye style={{fontSize: '22'}}/>
-                    <a className='dashtxt' style={{marginLeft:'5px'}}>VIEW ORDERS</a>
-                </td>
+                    <a href='/UpdateOrder' className='dashtxt' style={{marginLeft:'5px'}}>UPDATE ORDERS</a>
+                  </div>
+                </td> 
               </tr>
               <tr>
-                <td className='verifierhomedashtd'>
-                <FaEye style={{fontSize: '22'}}/>
-                <a className='dashtxt' style={{marginLeft:'5px'}}>UPDATE ORDERS</a>
-                </td>
+                <td className='verifierhomedashtd2'>
+                  <div className='verifierdashdiv2'>
+                    <FaEye style={{fontSize: '22'}}/>
+                    <a href='UpdateOrder' className='dashtxt' style={{marginLeft:'5px'}}>VIEW COMPLAINTS</a>
+                  </div>
+                </td> 
               </tr>
               <tr>
                 <td className='verifierhomedashtd'>

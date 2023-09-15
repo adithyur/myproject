@@ -211,9 +211,10 @@
 
   .ordertr {
     border-bottom-width: 1px;
+    /*height: 250px;*/
     border-color: rgb(179, 174, 174);
   }
 
-  .ordertd{
+  .ordertd1{
     padding: 15px;
   }

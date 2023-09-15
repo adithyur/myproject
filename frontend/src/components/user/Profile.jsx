@@ -1,12 +1,23 @@
 import  React, { useState , useEffect} from 'react';
 import axios from "axios";
+import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import NoIconNav from './NoIconNav';
+import { FaRegAddressCard } from 'react-icons/fa';
+import { MdSecurity } from 'react-icons/md';
+import { BsBox } from 'react-icons/bs';
+import { MdOutlineSell } from 'react-icons/md';
+import {MdOutlineConnectWithoutContact} from 'react-icons/md'
+import { FaPowerOff } from 'react-icons/fa';
 
 
 export default function Profile() {
 
     const authid= localStorage.getItem('authid')
+    const [userName, setUserName] = useState('');
+    const [mailid, setMailId] = useState('');
+    const navigate=useNavigate()
     const [bio, setBio]= useState({ name:'',
                                         mobile1:'',
                                         pincode:'',
@@ -17,6 +28,16 @@ export default function Profile() {
                                         landmark:'',
                                         mobile2:''
                                      });
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [showLogoutOverlay, setShowLogoutOverlay] = useState(false);
+  const toggleDropdown = () => {
+      setIsOpen(!isOpen);
+  };
+
+  const logout = () => {
+    setShowLogoutOverlay(true); 
+  }
 
     /*const handleChange = (e) => {
       const { name, value, type } = e.target;
@@ -87,124 +108,157 @@ export default function Profile() {
     const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(bio)
-      await axios.post(`http://localhost:8000/api/profile/update/${localStorage.getItem('authid')}`, bio)
-      alert("Address Added successfully");
+      if(bio.mobile1===bio.mobile2){
+        alert("use different mobile number as secondary")
+      }
+      else{
+        console.log(bio)
+        await axios.post(`http://localhost:8000/api/profile/update/${localStorage.getItem('authid')}`, bio)
+        alert("Address Added successfully");
+      }   
     } catch (error) {
       console.error('Error adding Address:', error);
       alert("Error adding Address:");
     }
   };
+
+  useEffect(() => {
+        const fetchUserName = async () => {
+          try {
+            console.log("user id : ",localStorage.getItem('authid'))
+            const res = await axios.get(`http://localhost:8000/api/user/getname/${localStorage.getItem('authid')}`);
+            const userData = res.data;
+    
+            if (userData && userData.username) {
+              setUserName(userData.username);
+              setMailId(userData.mailid)
+            }
+          } catch (error) {
+            console.error('Error fetching user:', error);
+          }
+        };
+    
+        fetchUserName();
+      }, []);
+
+      const handleLogoutOrder = () => {
+        localStorage.removeItem('authid')
+        navigate('/')
+      };
     
   return (
     <div>
         <div>
             <NoIconNav/>
         </div>
-        <div className='profilediv' >
-        <form className='profileform' onSubmit={handleSubmit}>
-      <div>
-            <input
-              className='profileinput'
-              type="text"
-              placeholder="Name"
-              name="name"
-              value={bio.name}
-              onChange={handlechange}
-              required
-            />
+        <div className='pro'>
+            <div className='pro1'>
+                <div className='pro2' style={{display:'flex'}}>
+                  <div style={{flexBasis:'90%'}}>
+                    <p className='h1'>Account</p>
+                    <p className='h2'> {userName} , {mailid} </p>
+                  </div>
+                  <div style={{marginTop:'80px' ,paddingTop:'10px' ,borderRadius:'10px', backgroundImage:'linear-gradient(135deg, #f34079 40%, #fc894d)',color:'white', height:'50px', width:'125px', flexBasis:'10%', fontWeight:'bold', fontSize:'18px'}}>
+                    <FaPowerOff/> <a onClick={logout} style={{ cursor: 'pointer' }}>Logout</a>
+                    {showLogoutOverlay && (
+                    <div className="overlay">
+                      <div className="overlay-content">
+                        <h2>Signing Off</h2>
+                        <p>Are you sure you want to logout?</p>
+                        <button onClick={handleLogoutOrder}>Yes, Cancel</button>
+                        <button onClick={() => setShowLogoutOverlay(false)}>No, Go Back</button>
+                      </div>
+                    </div>
+                  )}
+                  </div>
+                </div>
+                <div style={{marginTop:'50px'}}>
+                  <div style={{display:'flex'}} >
+
+                      <div className='box'>
+                      <Link to="/UserAddress" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <FaRegAddressCard size={35}/>
+                        <br/>
+                        <p style={{paddingTop:'10px',fontWeight:'600', fontSize:'20px', fontFamily:'times new roman'}}> Shipping Address</p>
+                        <p style={{color:'gray'}}>Where should we send your orders? Keep your address updated to ensure smooth and accurate deliveries.</p>
+                      </Link>
+                      </div>
+
+                      <div className='box' style={{marginLeft:'50px'}}>
+                      <Link to="/PickupAddress" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <FaRegAddressCard size={35}/>
+                        <br/>
+                        <p style={{paddingTop:'10px',fontWeight:'600', fontSize:'20px', fontFamily:'times new roman'}}> Pickup Address</p>
+                        <p style={{color:'gray'}}>Where should we collect your items? Keep your address updated to ensure smooth and accurate deliveries.</p>
+                      </Link>
+                      </div>
+
+                      <div className='box' style={{marginLeft:'50px'}}>
+                      <Link to="/LoginAndSecurity" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <MdSecurity size={35}/>   
+                        <br/>
+                        <p style={{paddingTop:'10px',fontWeight:'600', fontSize:'20px', fontFamily:'times new roman'}}> Login & security</p>
+                        <p style={{color:'gray'}}>Update your password and secure your account.</p>
+                      </Link>
+                      </div>
+                    
+                  </div>
+                    
+                  <div style={{marginTop:'50px', display:'flex'}}>
+                    <div className='box'>
+                    <Link to="/Orders" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <BsBox size={35}/>
+                      <br/>
+                      <p style={{paddingTop:'10px',fontWeight:'600', fontSize:'20px', fontFamily:'times new roman'}}> Orders</p>
+                      <p style={{color:'gray'}}>Track your purchase history and view order details.</p>
+                    </Link>
+                    </div>
+
+                    <div className='box' style={{marginLeft:'50px'}}>
+                    <Link to="/ProductManagement" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <MdOutlineSell size={35}/>
+                      <br/>
+                      <p style={{paddingTop:'10px',fontWeight:'600', fontSize:'20px', fontFamily:'times new roman'}}> Products</p>
+                      <p style={{color:'gray'}}>Showcase items you've listed for sale.</p>
+                    </Link>
+                    </div>
+
+                    <div className='box' style={{marginLeft:'50px'}}>
+                      <MdOutlineConnectWithoutContact size={35}/>
+                      <br/>
+                      <p style={{paddingTop:'10px',fontWeight:'600', fontSize:'20px', fontFamily:'times new roman'}}> Contact us</p>
+                      <p style={{color:'gray'}}>Touch in with our team.</p>
+                    </div>
+
+                  </div>
+
+              </div>
+
+
+                    {/*PRODUCT MANAGEMENT
+                    <div className={`prodropdown ${isOpen ? 'open' : ''}`}>
+                      <button className="prodropdown-btn1" onClick={toggleDropdown}>
+                          Product Management <i className="fa fa-caret-down" />
+                      </button>
+                      <div className="prodropdown-content1">
+                        <a href="/UserAddress">Shipping Address</a>
+                        <a href="/ComDetail">Company Address</a>
+                        <a href="/ViewProduct">Profile Deactivate</a>
+                      </div>
+                    </div>*/}
+
+
+                <div>
+                  
+                </div>  
+            </div>
+            
           </div>
-      <div>
-        <input className='profileinput'
-          type="tel"
-          placeholder="Primary number"
-          name="mobile1"
-          pattern="[5-9]{1}[0-9]{9}"
-          maxLength="10"
-          title="Must contain 10 numbers and first digit in greater than 5"
-          value={bio.mobile1}
-          onChange={handlechange}
-          required
-        />
-      </div>
-      <div>
-        <input className='profileinput'
-          type="text"
-          placeholder="Pin Code"
-          name="pincode"
-          value={bio.pincode}
-          onChange={handlechange}
-          required
-        />
-      </div>
-      <div>
-            <input
-              className='profileinput'
-              type="text"
-              placeholder="Place"
-              name="place"
-              value={bio.place}
-              onChange={handlechange}
-              required
-            />
+          <div style={{ marginTop:'100px'}}>
+          Need to deactivate your account?
+          <br/>
+          <a style={{textDecoration:'underline', fontWeight:'bold', paddingBottom:'10px'}}>Take care of that now</a>
           </div>
-          <div>
-            <input
-              className='profileinput'
-              type="text"
-              placeholder='Address'
-              name="address"
-              value={bio.address}
-              onChange={handlechange}
-              required
-            />
-          </div>
-      <div>
-        <input className='profileinput'
-          type="text"
-          placeholder='city'
-          name="city"
-          value={bio.city}
-          onChange={handlechange}
-          required
-        />
-      </div>
-      <div>
-        <input className='profileinput'
-          type="text"
-          placeholder='State'
-          name="state"
-          value={bio.state}
-          onChange={handlechange}
-          required
-        />
-      </div>
-      <div>
-        <input className='profileinput'
-          type="text"
-          placeholder='Landmark'
-          name="landmark"
-          value={bio.landmark}
-          onChange={handlechange}
-          required
-        />
-      </div>
-      <div>
-        <input className='profileinput'
-          type="tel"
-          placeholder="Secondary number"
-          name="mobile2"
-          pattern="[5-9]{1}[0-9]{9}"
-          maxLength="10"
-          title="Must contain 10 numbers and first digit in greater than 5"
-          value={bio.mobile2}
-          onChange={handlechange}
-          required
-        />
-      </div>
-      <button className="profilesubmit" type="submit">Submit</button>
-    </form>
-    </div>
     </div>
   );
 };

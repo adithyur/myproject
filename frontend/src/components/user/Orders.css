@@ -1,0 +1,14 @@
+.OrderHistroyth{
+    font-size: large;
+    font-family: "Arial", sans-serif;
+    padding-left: 25px;
+    height: 75px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    width: 150px;
+
+}
+
+.OrderHistroytr{
+    border-style:dashed;
+}

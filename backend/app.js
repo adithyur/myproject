@@ -28,7 +28,11 @@ app.use("/api/order",orderRouter)
 const transactionRouter = require("./Routes/transaction");
 app.use("/api/transaction",transactionRouter)
 
+const reviewRouter = require("./Routes/review");
+app.use("/api/review",reviewRouter)
 
+const sellerprofile = require("./Routes/sellerprofile");
+app.use("/api/sellerprofile",sellerprofile)
 
 app.listen(8000, () => {
     console.log("the port is listening on port 8000");

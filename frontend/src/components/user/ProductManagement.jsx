@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import "./ProductManagement.css";
-import  UserNav from './UserNav';
+import NoIconNav from './NoIconNav';
 import { Placeholder } from 'react-bootstrap';
 import AddProduct from './AddProduct';
+
+import { BsDatabaseFillAdd } from 'react-icons/bs';
+ 
 
 
 export default function ProductManagement() {
@@ -21,23 +24,51 @@ export default function ProductManagement() {
   return (
     <div>
         <div>
-            < UserNav/>
+            <NoIconNav/>
         </div>
+        <p
+          style={{
+            fontWeight: 'bold',
+            fontSize: '28px',
+            paddingTop: '50px',
+          }}
+        >
+          <BsDatabaseFillAdd style={{color:'green'}}/> Add Product
+        </p>
         <div className='Add'>
             <div className='Add1'>
                 <div className='Add2'>
-                    PRODUCT MANAGEMENT
-                    <div className={`dropdown ${isOpen ? 'open' : ''}`}>
-      <button className="dropdown-btn1" onClick={toggleDropdown}>
-        Product Management <i className="fa fa-caret-down" />
-      </button>
-      <div className="dropdown-content1">
-        <a href="/ViewProduct">View Product</a>
-        <a href="/AddProduct">Add Product</a>
-        <a href="/ViewProduct">Update Product</a>
-        <a href="/ViewProduct">Delete Product</a>
-      </div>
-    </div>
+                    
+                    <div >
+                      <p className="dropdown-btn1">
+                        Product Management 
+                      </p>
+
+                      <div style={{backgroundColor:'#ccc',marginLeft:'150px', width:'300px', height:'50px'}}>
+                        <a href="/ViewProduct">
+                          View Product
+                        </a>
+                      </div>
+                      
+                       
+                      <div style={{backgroundColor:'#ccc',marginLeft:'150px', width:'300px', height:'50px'}}>
+                        <a href="/AddProduct">
+                          Add Product
+                        </a>
+                      </div>
+
+                      <div style={{backgroundColor:'#ccc',marginLeft:'150px', width:'300px', height:'50px'}}>
+                        <a href="/ViewProduct">
+                          Update Product
+                        </a>
+                      </div>
+
+                      <div style={{backgroundColor:'#ccc',marginLeft:'150px', width:'300px', height:'50px'}}>
+                        <a href="/ViewProduct">
+                          Orders
+                        </a>
+                      </div>
+                    </div>
                 </div>
                 <div>
                     <AddProduct/>

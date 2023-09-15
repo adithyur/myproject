@@ -50,6 +50,8 @@
     font-family: inherit;
     margin: 0;
     cursor: pointer;
+    width: 300px;
+    margin-left: 150px;
   }
   
   .dropdown-content1 {

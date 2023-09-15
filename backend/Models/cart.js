@@ -14,7 +14,14 @@ const cartSchema = mongoose.Schema({
   quantity: {
     type: Number,
     default: 1,
+  },
+  price: {
+    type: String
+  },
+  total: {
+    type: String
   }
+
 });
 
 cartSchema.index({ userid: 1, productid: 1 }, { unique: true });

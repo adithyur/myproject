@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import "./UserNav.css"
+import { Navigate, useNavigate } from "react-router-dom";
+
+
+import  NoIconNav from './NoIconNav'
 import "./Checkout.css"
 
 function Checkout() {
 
-        const authid= localStorage.getItem('authid')
         const [product, setProduct] = useState([]);
+        const navigate = useNavigate();
         const [bio, setBio]= useState({ name:'',
                                         mobile1:'',
                                         pincode:'',
@@ -18,35 +20,10 @@ function Checkout() {
                                         landmark:'',
                                         mobile2:''
                                      });
-        
-        const logout = () => {
-            localStorage.removeItem('authid')
-            navigate('/')
-        }
-
-        const navigate=useNavigate()
-        const [isOpen, setIsOpen] = useState(false);
-        const toggleDropdown = () => {
-            setIsOpen(!isOpen);
-        };
-      
-
-        const fetchProducts = async () => {
-          try {
-            const res = await axios.get(`http://localhost:8000/api/cart/getcartbyuserid/${localStorage.getItem('authid')}`);
-            setProduct(res.data);
-            /*console.log(res.data);*/
-          } catch (error) {
-            console.error('Error fetching products:', error);
-          }
-        };
-        useEffect(() => {
-          fetchProducts()
-      },[])
 
       const fetchBio = async () => {
         try {
-          const res = await axios.get(`http://localhost:8000/api/profile/profile/${localStorage.getItem('authid')}`);
+          const res = await axios.get(`http://localhost:8000/api/profile/profile/${localStorage.getItem('authid')}` );
           /*setFormFields(res.data)
           console.log(formFields)*/
           if(res){
@@ -84,108 +61,118 @@ function Checkout() {
   };
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (bio.mobile1===bio.mobile2){
-        alert("use different mobile number as secondary")
+      e.preventDefault();
+      try {
+        if (bio.mobile1===bio.mobile2){
+          alert("use different mobile number as secondary")
+          }
+        else{
+          console.log(bio)
+          const res = await axios.get(`http://localhost:8000/api/order/getOrderDetails/${localStorage.getItem('authid')}`);
+          const orderId = res.data.orderId;
+          console.log('order id : ',orderId)
+          await axios.post(`http://localhost:8000/api/order/profile/${orderId}`, bio)
+          alert("Address Added successfully");
         }
-      else{
-        console.log(bio)
-        await axios.post(`http://localhost:8000/api/profile/update/${localStorage.getItem('authid')}`, bio)
-        alert("Address Added successfully");
+      
+      } catch (error) {
+        console.error('Error adding Address:', error);
+        alert("Error adding Address:");
       }
-     
+  };
+
+  const totalPrice = product.reduce((totals, cartItem) => {
+    const total = cartItem.total;
+    return totals + parseFloat(total);
+  }, 0);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  // Fetch user's orders
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8000/api/order/dsplywaiting/${localStorage.getItem('authid')}`);
+      setProduct(res.data);
+      console.log('Order ID: ', res.data);
     } catch (error) {
-      console.error('Error adding Address:', error);
-      alert("Error adding Address:");
+      console.error('Error fetching products:', error);
     }
   };
+
+  // Delete orders with "waiting for confirmation" status
+  const deleteOrders = async () => {
+    try {
+      await axios.delete(`http://localhost:8000/api/order/delete/${localStorage.getItem('authid')}`, {
+        params: { status: 'waiting for confirmation' },
+      });
+      console.log('Orders with status "waiting for confirmation" deleted.');
+    } catch (error) {
+      console.error('Error deleting orders:', error);
+    }
+  };
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Call the deleteOrders function before leaving the page
+      deleteOrders();
+    };
+
+    // Add the event listener
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Remove the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  const handleCheckout = async () => {
+    try {
+      console.log('Handle Checkout called');
+      const res = await axios.get(`http://localhost:8000/api/order/getOrderDetails/${localStorage.getItem('authid')}`);
+      console.log(" address : ",res.data.address);
+      if(res.data.address){
+      const { orderId, productId } = res.data;
+  
+      if (orderId && productId) {
+        navigate(`/CreditCardForm?orderId=${orderId}&productId=${productId}`);
+      } else {
+        console.error('Order ID or Product ID not found in the response');
+      }
+    }
+    else{
+      alert("Please select the delivery address")
+    }
+    } catch (error) {
+      console.error('Error fetching order details:', error);
+    }
+  };
+  
+  
+  
+  
+//navigate('/CreditCardForm')
+  
 
 
   return (
     <div>
       <div>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <title>New2U</title>
-            <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" />
-            <link rel="stylesheet" href="style.css" />
-            <div className="main-navbar shadow-sm sticky-top">
-                <div className="top-navbar">
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
-                                <div className="gradient-text">
-                                    <a className="nav-link" href="/UserHome">
-                                    <h5 className="brand-name">New2U</h5>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="col-md-5 my-auto">
-                                <form role="search">
-                                <div className="input-group">
-                                    <input type="search" placeholder="Search your product" className="form-control" />
-                                    <span className="search-button">
-                                    <button className="search-button1" type="submit">
-                                    <i className="fa fa-search" />
-                                    </button>
-                                    </span> 
-                                </div>
-                                </form>
-                            </div>
-                            <div className="col-md-5 my-auto">
-                                <ul className="nav justify-content-end">
-                                <li className="nav-item">
-                                <div className="gradient-text">
-                                    <a className="nav-link" href="#">
-                                    <i className="fa fa-shopping-cart" /> Cart
-                                    </a>
-                                </div>
-                                </li>
-                                <li className="nav-item">
-                                <div className="gradient-text">
-                                    <a className="nav-link" href="#">
-                                    <i className="fa fa-heart" /> Wishlist
-                                    </a>
-                                </div>
-                                </li>
-                                <li className="nav-item">
-                                <div className="gradient-text">
-                                    <a className="nav-link" href="/login">
-                                    <i className="fa fa-user" /> My Account
-                                    </a>
-                                </div>
-                                </li>
-                                <li className="nav-item">
-                                    <div className={`dropdown ${isOpen ? 'open' : ''}`}>
-                                        <button className="dropdown-btn" onClick={toggleDropdown}>
-                                            Profile <i className="fa fa-caret-down" />
-                                        </button>
-                                    <div className="dropdown-content">
-                                        <a href="/Profile">My Profile</a>
-                                        <a href="#">Orders</a>
-                                        <a href="/ProductManagement">Products</a>
-                                        <a onClick={logout}>Logout</a>
-                                    </div>
-                                </div>
-                                </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        < NoIconNav/>
         </div>
         <div className='checkbody'>
           <div className='subcheckbody'>
             <div className='checkformdiv'>
+
               <form className='checkform' onSubmit={handleSubmit}>
 
                 <div className='vertical1'>
                   <div className='checkform1'>
                   <label className="fname">Name*</label>
-                  <input className="checktxt" 
+                  <input 
+                    className="checktxt" 
                     type="text" 
                     name="name"
                     value={bio.name}
@@ -195,8 +182,11 @@ function Checkout() {
                 <div className='checkform2'>
                   <label className="fname">Mobile Number*</label>
                   <input className="checktxt" 
-                    type="text" 
+                    type="tel" 
                     name="mobile1"
+                    pattern="[5-9]{1}[0-9]{9}"
+                    maxLength="10"
+                    title="Must contain 10 numbers and first digit in greater than 5"
                     value={bio.mobile1}
                     onChange={handlechange}
                   />
@@ -206,7 +196,7 @@ function Checkout() {
                 <div className='checkform3'>
                   <label className="fname">Pincode*</label>
                   <input className="checktxt" 
-                    type="text" 
+                    type="tel" 
                     placeholder="pincode"
                     name="pincode"
                     value={bio.pincode}
@@ -229,7 +219,7 @@ function Checkout() {
                   <textarea className="checktxt1" 
                     type="text" 
                     placeholder="Address"
-                    name="Address"
+                    name="address"
                     rows="4" cols="1"
                     value={bio.address}
                     onChange={handlechange}
@@ -241,7 +231,7 @@ function Checkout() {
                   <input className="checktxt" 
                     type="text" 
                     placeholder="City"
-                    name="City"
+                    name="city"
                     value={bio.city}
                     onChange={handlechange}
                   />
@@ -251,7 +241,7 @@ function Checkout() {
                   <input className="checktxt" 
                     type="text" 
                     placeholder="State"
-                    name="State"
+                    name="state"
                     value={bio.state}
                     onChange={handlechange}
                   />
@@ -274,6 +264,9 @@ function Checkout() {
                     type="text" 
                     placeholder="mobile2"
                     name="mobile2"
+                    pattern="[5-9]{1}[0-9]{9}"
+                    maxLength="10"
+                    title="Must contain 10 numbers and first digit in greater than 5"
                     value={bio.mobile2}
                     onChange={handlechange}
                   />
@@ -285,26 +278,27 @@ function Checkout() {
             <div className='cartdiv'>
         <h1>YOUR ORDER</h1>
           <div id="overflowTest">
-            {product.map((cart, index) => (
+            {product.map((order, index) => (
             
-            <table key={index} style={{textAlign:'left'}}>
+            <table key={index} style={{textAlign:'left', marginTop:'20px', height:'200px'}}>
               <tr className='ordertr'>
-                <td className='ordertd'>
-                  <img className='card-img-top' src={`http://localhost:8000/${cart.productDetails.image}`} alt='Card' style={{ height: '150px' , width: '200px'}} />
+                <td className='ordertd1'>
+                  <img className='card-img-top' src={`http://localhost:8000/${order.productDetails.image}`} alt='Card' style={{ height: '180px' , width: '180px'}} />
                 </td>
                 <td>
-                  <h4 style={{paddingLeft:'10px'}}>{cart.productDetails.productName}</h4>
+                  <h4>{order.productDetails.productName}</h4>
                   <br></br>
-                <h5 style={{paddingLeft:'10px'}}>{cart.productDetails.price}</h5>
-                </td>
-              
+                  <h5 style={{color:'green'}}>₹ {order.total}</h5>
+                  <br></br>
+                  <h5>Quantity : {order.quantity}</h5>
+                </td>             
               </tr>
             </table>
             
             ))}
           </div>
-          <h2 style={{paddingTop:'20px'}}> TOTAL ₹ 10298 </h2><br/>
-          <button className="button-37" type="submit">Check Out</button>
+          <h2 style={{paddingTop:'20px', color:'green'}}> TOTAL ₹ {totalPrice} </h2><br/>
+          <button className="button-37" type="submit" onClick={handleCheckout}> Check Out </button>
           
       </div>
     </div>

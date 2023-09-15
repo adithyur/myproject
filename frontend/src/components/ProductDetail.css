@@ -57,7 +57,7 @@
 }
 
 .product-img1{
-  width: 585px;
+  width: 505px;
   margin-right: 280px;
   background-color: #f9f9f9 ;
   border-top-left-radius: 20px;
@@ -79,6 +79,7 @@
 .product-img4{
   width: 290px;
 }
+
 .product-img5{
   width: 290px;
   padding-left: 10px;
@@ -89,10 +90,10 @@
   color: green;
   text-align: left;
   padding-top: 20px;
+  font-family: bol
 }
 .product-detail {
     border-radius: 4px;
-    margin-left: 140px;
   }
   
   .product-detail h2 {
@@ -107,7 +108,7 @@
   }
   
   .sharecartwishlist{
-    margin-left: 850px;
+    margin-left: 845px;
     background-color: transparent;
     width: 280px;
     display: flex;
@@ -207,3 +208,21 @@
     color:green;
     cursor: pointer;
   }
+
+  .gold-star {
+    color: gold;
+    padding-left: 5px;
+
+  }
+  
+  .white-star {
+    color: rgb(231, 227, 227);
+    padding-left: 5px;
+  }
+
+  .prh1{
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+  }
+
+  

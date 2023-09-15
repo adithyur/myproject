@@ -6,6 +6,11 @@ const transactionSchema = mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  orderid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'order',
+    required: true,
+  },
   amount: {
     type: String,
     required: true
@@ -14,6 +19,14 @@ const transactionSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  status: {
+    type: String,
+    require: true,
+    default: 'paid'
+  },
+  date: {
+    type: Date
+  }
 });
 
 module.exports = mongoose.model('transaction', transactionSchema);

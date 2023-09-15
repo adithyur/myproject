@@ -81,7 +81,10 @@ function ViewProduct() {
           <th className='viewproduct_th'>Product Type</th>
           <th className='viewproduct_th'>Category</th>
           <th className='viewproduct_th'>Brand</th>
+          
           <th className='viewproduct_th'>Image</th>
+          <th className='viewproduct_th'>Status</th>
+          <th className='viewproduct_th'>Reason</th>
           <th className='viewproduct_th'></th>
         </tr>
       </thead>
@@ -99,6 +102,8 @@ function ViewProduct() {
             <td>
               <img src={`http://localhost:8000/${product.image}`} alt="Product" style={{ height: '50px' }} />
             </td>
+            <td className='viewproduct_td'>{product.status}</td>
+            <td className='viewproduct_td'>{product.reason}</td>
             <td className='viewproduct_td'>
               <MdDelete size={24} className='deleteicon' onClick={() => deleteProduct(product._id)} />
             </td>

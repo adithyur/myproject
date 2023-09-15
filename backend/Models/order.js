@@ -11,52 +11,71 @@ const orderSchema = mongoose.Schema({
     ref: 'products',
     required: true,
   },
+  sellerid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
   quantity: {
-    type: String,
-    required: true
+    type: Number,
+    default: 1,
   },
   price: {
+    type: String
+  },
+  total: {
+    type: String
+  },
+  sum: {
+    type: String
+  },
+  
+  status: {
     type: String,
-    required: true
+    default: 'waiting for confirmation'
+  },
+  transactionid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'transaction'
   },
 
-    name: {
-        type: String,
-        required: true
+  deliverydate: {
+    type: Date
+  },
+
+  name: {
+        type: String
     },
     mobile1: {
-        type: String,
-        required: true,
+        type: String
     },
     pincode: {
-        type: String,
-        required: true
+        type: String
     },
     place: {
-        type: String,
-        required: true
+        type: String
     },
     address: {
-        type: String,
-        required: true
+        type: String
     },
     city: {
-        type: String,
-        required: true
+        type: String
     },
     state: {
-        type: String,
-        required: true
+        type: String
     },
     landmark: {
-        type: String,
+        type: String
     },
     mobile2: {
-        type: String,
+        type: String
     },
-
+    payment: {
+      type: String
+    }
 });
 
-orderSchema.index({ userid: 1, productid: 1 }, { unique: true });
+orderSchema.index({ userid: 1, productid: 1 }, { unique: false });
 
 module.exports = mongoose.model('order', orderSchema);
+

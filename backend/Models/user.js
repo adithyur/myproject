@@ -24,6 +24,11 @@ const userSchema = mongoose.Schema({
         type: String,
         enum: ['admin', 'verifier', 'user'],
         default: 'user'
+    },
+    status:{
+        type: String,
+        enum: ['active', 'deactivate', 'removed'],
+        default: 'active'
     }
 
 });

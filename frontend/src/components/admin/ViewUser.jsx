@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { AiOutlineHome, AiFillHome } from 'react-icons/ai';
 import { FaUsers } from 'react-icons/fa';
 import { FaRobot } from 'react-icons/fa';
@@ -8,6 +9,31 @@ import { FaEye } from 'react-icons/fa';
 import { FaCheckCircle } from 'react-icons/fa';
 
 function ViewUser() {
+
+  const [users, setUsers] = useState([]);
+    useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const res = await axios.post('http://localhost:8000/api/user/viewuser');
+      setUsers(res.data);
+    } catch (error) {
+      console.error('Error fetching order history:', error);
+    }
+  };
+
+  const deleteUser = async (userId) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/user/delete/${userId}`);
+      // Remove the deleted user from the users list
+      setUsers(users.filter(user => user._id !== userId));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
+
   return (
    <div className='fulladmin'>
         <div className='sideoption'>
@@ -63,32 +89,31 @@ function ViewUser() {
         <table className='verifierproduct_table'>
       <thead>
         <tr className='verifierproduct_tr'>
-            
-        <th className='verifierproduct_th'></th>
-            <th className='verifierproduct_th'>User Id</th>
+        
+          <th className='verifierproduct_th'>User Id</th>
           <th className='verifierproduct_th'>User Name</th>
           <th className='verifierproduct_th'>Email iD</th>
           <th className='verifierproduct_th'>Trade Type</th>
+          <th className='verifierproduct_th'></th>
           
         </tr>
       </thead>
       <tbody>
-          <tr className='verifier_table_tr'>
-
-          <td className='verifierproduct_td'>
-                <input type='checkbox'/>
-            </td>
-            
-            <td className='verifierproduct_td'>648b618e8cd8cafefda3b467</td>
-            <td className='verifierproduct_td'>Adhi</td>
-            <td className='verifierproduct_td'>adhi@gmail.com</td>
-            <td className='verifierproduct_td'>Both</td>
-
-          </tr>
+      {users.map((user) => (
+            <tr key={user._id} className='verifier_table_tr'>
+          
+              <td className='verifierproduct_td'>{user._id}</td>
+              <td className='verifierproduct_td'>{user.name}</td>
+              <td className='verifierproduct_td'>{user.email}</td>
+              <td className='verifierproduct_td'>{user.trade}</td>
+              <td className='verifierproduct_td'>
+                <button className="button-124" role="button" onClick={() => deleteUser(user._id)}>REMOVE</button>
+              </td>
+            </tr>
+          ))}
 
       </tbody>
     </table>
-    <button className="button-124" role="button">REMOVE</button>
 
         </div>
         </div>

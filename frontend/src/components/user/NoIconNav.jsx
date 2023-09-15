@@ -1,73 +1,80 @@
-import React from 'react';
-import "./UserNav.css";
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { FaSearch } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
+import { AiFillHeart } from 'react-icons/ai';
+import { FaUser } from 'react-icons/fa';
+import "./UserNav.css"
 
 function NoIconNav() {
+
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    const authid= localStorage.getItem('authid')
+    if(!authid){
+      navigate('/login')
+    }
+  },[])
+
+    const logout = () => {
+      localStorage.removeItem('authid')
+      navigate('/')
+    }
+    const navigate=useNavigate()
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+      };
+
+      useEffect(() => {
+        const fetchUserName = async () => {
+          try {
+            console.log("user id : ",localStorage.getItem('authid'))
+            const res = await axios.get(`http://localhost:8000/api/user/getname/${localStorage.getItem('authid')}`);
+            const userData = res.data;
+    
+            if (userData && userData.username) {
+              setUserName(userData.username);
+            }
+          } catch (error) {
+            console.error('Error fetching user:', error);
+          }
+        };
+    
+        fetchUserName();
+      }, []);
+
+
+
   return (
     <div>
-    <div>
-<meta charSet="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>New2U</title>
-<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="style.css" />
-<div className="main-navbar shadow-sm sticky-top">
-<div className="top-navbar">
-  <div className="container-fluid">
-    <div className="row">
-      <div className="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
-        <div className="gradient-text">
-        <a className="nav-link" href="/">
-        <h5 className="brand-name">New2U</h5>
-        </a>
+    <div style={{height:'80px', borderBottom:'1px solid rgb(225, 217, 217)', marginTop:'30px', marginLeft:'100px', display:'flex', marginRight:'100px',/*backgroundColor:'blanchedalmond'*/ }}>
+      <a className="pnav" style={{textAlign:'left', fontWeight:'bold', fontSize:'30px', fontFamily:'unset', paddingTop:'5px'}} href='/UserHome'>New2U</a>
+      <div className="navbar2">
+        <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'10px'}}>Fresh</div>
+        <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px'}}>Refurbished</div>
+        <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px'}}>Both</div>
+        <div className="search-bar2">
+          <input className='navtext2'type="text" placeholder="Search your products" />
+          <button className='navbutton2'><FaSearch/></button>
         </div>
       </div>
-      <div className="col-md-5 my-auto">
-        <form role="search">
-          <div className="input-group">
-            <input type="search" placeholder="Search your product" className="form-control" />
-            <span className="search-button">
-            <button className="search-button1" type="submit">
-              <i className="fa fa-search" />
-            </button>
-            </span>
-          </div>
-        </form>
-      </div>
-      
-      <div className="col-md-5 my-auto">
-        <ul className="nav justify-content-end">
-          
-          <li className="nav-item">
-          <div className="gradient-text">
-            <a className="nav-link" href="#">
-              <i className="fa fa-shopping-cart" /> Cart
-            </a>
-          </div>
-          </li>
-          <li className="nav-item">
-          <div className="gradient-text">
-            <a className="nav-link" href="#">
-              <i className="fa fa-heart" /> Wishlist
-            </a>
-          </div>
-          </li>
-          <li className="nav-item">
-          <div className="gradient-text">
-            <a className="nav-link" href="/login">
-              <i className="fa fa-user" /> Login
-            </a>
-          </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-</div>
+      <div style={{display:'flex',textAlign:'left', marginLeft:'220px', marginTop:'15px'}}>    
+        <a style={{fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/Cart">
+          <FaShoppingCart size={22} className='pnav-icon'/>  Cart</a>
 
+        <a style={{paddingLeft:'25px', fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/Wishlist">
+          <AiFillHeart size={24} className='pnav-icon'/> Wishlist
+        </a>
+
+        <a style={{paddingLeft:'25px', fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/Profile">
+          <FaUser size={22} className='pnav-icon'/> {userName}
+        </a>
+      </div>
     </div>
+</div>
   )
 }
 

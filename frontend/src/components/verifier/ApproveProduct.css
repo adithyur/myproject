@@ -172,8 +172,8 @@
     line-height: 16px;
     min-height: 40px;
     outline: 0;
-    margin-left: 50px;
-    margin-top: 20px;
+    /*margin-left: 50px;
+    margin-top: 20px;*/
     padding: 12px 14px;
     text-align: center;
     text-rendering: geometricprecision;
