@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import  NoIconNav from './user/NoIconNav';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import './Review.css';
@@ -8,6 +8,7 @@ import './Review.css';
 function Review() {
 
     const location = useLocation();
+    const navigate = useNavigate();
     const [product, setProduct] = useState({});
     const [rating, setRating] = useState(0);
     const [hoveredStar, setHoveredStar] = useState(0);
@@ -92,6 +93,7 @@ function Review() {
 
       if (res.status === 201) {
         console.log('Review and comment saved to the database');
+        //navigate('/ProductDetail');
       }
     } catch (error) {
       console.error('Error saving review and comment:', error);

@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import NoIconNav from './user/NoIconNav';
+import Navbar from './Navbar'
 import './ProductDetail.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { HiShoppingCart } from 'react-icons/hi';
+import { FaSearch } from 'react-icons/fa';
 import { IoArrowRedoCircle } from 'react-icons/io5';
 import { BsStarFill } from 'react-icons/bs';
 import { BiUserCircle } from 'react-icons/bi';
+import { FaShoppingCart } from 'react-icons/fa';
+import { AiFillHeart } from 'react-icons/ai';
+import { FaUser } from 'react-icons/fa';
 
 
 const ProductDetail = () => {
 
   const navigate = useNavigate();
+  const [showUser, setShowUser] = useState(false);
+  const [showUser1, setShowUser1] = useState(false);
   const [product, setProduct] = useState({});
   const [userCount, setUserCount] = useState(0);
   const [reviews, setReviews] = useState([]);
@@ -48,6 +56,21 @@ const ProductDetail = () => {
 
   const [isSaved, setIsSaved] = useState(false);
   const [isCart, setIsCart] = useState(false);
+
+  const handleCheck = async () => {
+
+    const authid = localStorage.getItem('authid');
+    if (authid){
+      setShowUser(true);
+    }
+    else{
+      setShowUser1(true);
+    }
+  }
+
+  useEffect(() => {
+    handleCheck();
+  }, []);
 
   const handleButtonClick = async () => {
     const authid = localStorage.getItem('authid');
@@ -258,68 +281,37 @@ const ProductDetail = () => {
   return (
     <div>
       <div>
-<meta charSet="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>New2U</title>
-<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="style.css" />
-<div className="main-navbar shadow-sm sticky-top">
-  <div className="top-navbar">
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
-          <div className="gradient-text">
-          <a className="nav-link" href="/">
-          <h5 className="brand-name">New2U</h5>
-          </a>
-          </div>
-        </div>
-        <div className="col-md-5 my-auto">
-          <form role="search">
-            <div className="input-group">
-              <input type="search" placeholder="Search your product" className="form-control" />
-              <span className="search-button">
-              <button className="search-button1" type="submit">
-                <i className="fa fa-search" />
-              </button>
-              </span>
-            </div>
-          </form>
-        </div>
-        
-        <div className="col-md-5 my-auto">
-          <ul className="nav justify-content-end">
-            
-            <li className="nav-item">
-            <div className="gradient-text">
-              <a className="nav-link" href="#">
-                <i className="fa fa-shopping-cart" /> Cart
-              </a>
-            </div>
-            </li>
-            <li className="nav-item">
-            <div className="gradient-text">
-              <a className="nav-link" href="#">
-                <i className="fa fa-heart" /> Wishlist
-              </a>
-            </div>
-            </li>
-            <li className="nav-item">
-            <div className="gradient-text">
-              <a className="nav-link" href="/login">
-                <i className="fa fa-user" /> Login
-              </a>
-            </div>
-            </li>
-          </ul>
-        </div>
+          {showUser && (
+          < NoIconNav/> 
+          )}
+          {showUser1 && (
+                  <div style={{height:'80px', borderBottom:'1px solid rgb(225, 217, 217)', marginTop:'30px', marginLeft:'100px', display:'flex', marginRight:'100px',/*backgroundColor:'blanchedalmond'*/ }}>
+                  <a className="pnav" href="/" style={{textAlign:'left', fontWeight:'bold', fontSize:'30px', fontFamily:'unset', paddingTop:'5px'}}>New2U</a>
+                  <div className="navbar2">
+                    <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'10px'}}>Fresh</div>
+                    <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px'}}>Refurbished</div>
+                    <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px'}}>Both</div>
+                    <div className="search-bar2">
+                      <input className='navtext2'type="text" placeholder="Search your products" />
+                      <button className='navbutton2'><FaSearch/></button>
+                    </div>
+                  </div>
+                  <div style={{display:'flex',textAlign:'left', marginLeft:'220px', marginTop:'15px'}}>    
+                    <a style={{fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/login">
+                      <FaShoppingCart size={22} className='pnav-icon'/>  Cart</a>
+          
+                    <a style={{paddingLeft:'25px', fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/login">
+                      <AiFillHeart size={24} className='pnav-icon'/> Wishlist
+                    </a>
+          
+                    <a style={{paddingLeft:'25px', fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/login">
+                      <FaUser size={22} className='pnav-icon'/> Login
+                    </a>
+                  </div>
+                </div>
+          )}
       </div>
-    </div>
-  </div>
-  </div>
-  </div>
-  <div>
+    <div>
     <div className='productdiv1'>
     <div className='productdiv8'>
       <div className='productbook'>
@@ -356,11 +348,11 @@ const ProductDetail = () => {
         <div className='productdiv3'>
             <div className='productdiv4'>
               <img className="product-img2" src={`http://localhost:8000/${product.image}`} alt="Product" style={{ height: "245px" }} />
-              <img className="product-img3" src={`http://localhost:8000/${product.image}`} alt="Product" style={{ height: "245px" }} />
+              <img className="product-img3" src={`http://localhost:8000/${product.image2}`} alt="Product" style={{ height: "245px" }} />
             </div>
             <div className='productdiv5'>
-              <img className="product-img4" src={`http://localhost:8000/${product.image}`} alt="Product" style={{ height: "245px"}} />
-              <img className="product-img5" src={`http://localhost:8000/${product.image}`} alt="Product" style={{ height: "245px" }} />
+              <img className="product-img4" src={`http://localhost:8000/${product.image3}`} alt="Product" style={{ height: "245px"}} />
+              <img className="product-img5" src={`http://localhost:8000/${product.image4}`} alt="Product" style={{ height: "245px" }} />
             </div>
           </div>
         </div>
@@ -373,7 +365,7 @@ const ProductDetail = () => {
           <h1 className='prh1' style={{ textAlign:'left', paddingLeft:'20px'}}>Description </h1>
           <div className='testdiv'>
             <div className='descri' style={{marginLeft:'140px'}}>
-            {product.description?.split(',').map((i)=> (
+            {product.description?.split(/[|,]/).map((i)=> (
               <div>
                 <p>. {i}</p>
               </div>
@@ -381,12 +373,12 @@ const ProductDetail = () => {
             </div>
             <div>
               <div>
-                <button onClick={rateProduct}>Rate Product</button>
+                <button onClick={rateProduct} style={{border:'none', backgroundColor:'transparent', fontWeight:'bold', color:'green' ,fontFamily:'time new roman', fontSize:'18px'}}>RATE PRODUCT ?</button>
                 <h1 style={{ textAlign:'left', paddingLeft:'20px'}}>Ratings & Reviews</h1>
                 <div style={{/*backgroundColor:'cyan',*/ display:'flex', width:'60%', marginLeft:'150px'}}>
-                    <div style={{flexBasis:'30%', backgroundColor:'GrayText'}}>
-                      <h1 style={{ textAlign:'left', paddingTop:'25px', borderRadius:'10px'}}>{averageRating} <BsStarFill style={{color:'green'}} /> </h1>
-                      <p style={{textAlign:'left'}}>Average Rating</p>
+                    <div style={{flexBasis:'30%'}}>
+                    <p style={{textAlign:'left', paddingTop:'25px', fontWeight:'bold'}}>Average Rating</p>
+                      <h1 style={{ textAlign:'left', borderRadius:'10px'}}>{averageRating} <BsStarFill style={{color:'green'}} /> </h1>
                     </div>
                     <div style={{flexBasis:'50%'}}>                     
                       {[1, 2, 3, 4, 5].map((row) => (
@@ -420,17 +412,17 @@ const ProductDetail = () => {
                     </div>
                   </div>
               </div>
-              <div style={{borderTop:'1px solid '}}>
-              <div style={{marginLeft:'180px',marginTop:'50px', backgroundColor:'yellowgreen', textAlign:'left', borderBottom:'1px solid'}}>
+              <div style={{borderTop:'1px solid rgb(225, 217, 217)'}}>
+              <div style={{marginLeft:'180px',marginTop:'50px', textAlign:'left', marginTop:'40px'}}>
               {reviews.map((review) => (
-      <div key={review._id} >
-      <div style={{display:'flex', marginTop:'50px'}}>
+      <div key={review._id} style={{borderBottom:'1px solid rgb(225, 217, 217)'}}>
+      <div style={{display:'flex', marginTop:'20px'}}>
         <div>
-          <BiUserCircle size={60} style={{paddingTop:'5px', fontWeight:'lighter'}}/>
+          <BiUserCircle size={40} style={{paddingTop:'5px', fontWeight:'lighter'}}/>
         </div>
         <div>
-          <p style={{fontSize:'25px', paddingLeft:'5px'}}> {review.user}</p>
-          <p style={{marginTop:'-10px', paddingLeft:'5px', fontSize:'20px'}}>
+          <p style={{fontSize:'18px', paddingLeft:'5px'}}> {review.user}</p>
+          <p style={{marginTop:'-10px', paddingLeft:'5px', fontSize:'15px'}}>
           {review.rating}★
           </p>
       </div>

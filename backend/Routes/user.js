@@ -50,6 +50,25 @@ router.post('/reguser', async (req, res) => {
       }
     })
 
+    router.get('/userdetail/:userId', async (req, res) => {
+      try {
+        const { userId } = req.params;
+    
+        // Use your User model to find the user by their ID
+        const user = await User.findById(userId);
+    
+        if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+    
+        // Return the user details as JSON
+        res.status(200).json(user);
+      } catch (error) {
+        console.error('Error getting user:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+      }
+    });
+
     router.post('/viewuser', async (req, res) => {
     try {
       const roleuser = await User.find({ role: 'user' });
@@ -57,6 +76,33 @@ router.post('/reguser', async (req, res) => {
     } catch (error) {
       console.error('Error fetching user:', error);
       res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.post('/viewverifier', async (req, res) => {
+    try {
+      const roleverifier = await User.find({ role: 'verifier' });
+      res.json(roleverifier);
+    } catch (error) {
+      console.error('Error fetching verifier:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.get('/getTrade/:userId', async (req, res) => {
+    try {
+      const userId = req.params.userId;
+  
+      const user = await User.findById(userId).select('trade');
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      res.json({ trade: user.trade });
+    } catch (error) {
+      console.error('Error fetching user trade:', error);
+      res.status(500).json({ message: 'Internal server error' });
     }
   });
 
@@ -91,6 +137,26 @@ router.post('/reguser', async (req, res) => {
     } catch (error) {
       console.error('Error getting user:', error);
       res.status(500).json({ message: error });
+    }
+  });
+
+  router.get('/countUsers', async (req, res) => {
+    try {
+      const userCount = await User.countDocuments({ role: 'user' });
+      res.json({ count: userCount });
+    } catch (error) {
+      console.error('Error counting users:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+  router.get('/countVerifier', async (req, res) => {
+    try {
+      const verifierCount = await User.countDocuments({ role: 'verifier' });
+      res.json({ count: verifierCount });
+    } catch (error) {
+      console.error('Error counting verifier:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
     }
   });
 
@@ -192,21 +258,22 @@ router.post('/reguser', async (req, res) => {
   router.put('/updatePassword/:userid', async (req, res) => {
     try {
       const { userid } = req.params;
-      const { newPassword } = req.body;
+      const { newPassword2 } = req.body;
   
-      // Validate inputs
-      if (!newPassword) {
+      if (!newPassword2) {
         return res.status(400).json({ message: 'New password is required' });
       }
-  
-      // Generate a salt and hash the new password
-      const saltRounds = 10; // Number of salt rounds
-      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-  
-      // Update the user's password in your database
-      // ... Your database update code here ...
-  
-      res.status(200).json({ message: 'Password updated successfully' });
+      password = await bcrypt.hash(newPassword2, 10);
+      const updatedPassword = await User.findByIdAndUpdate(
+        userid,
+        { password: password},
+        { new: true }
+      );
+
+      if(updatedPassword)
+      {
+        res.status(200).json({ message: 'Password updated successfully' });
+      }
     } catch (error) {
       console.error('Error updating password:', error);
       res.status(500).json({ message: 'Internal Server Error' });

@@ -207,11 +207,14 @@ export default function AddProduct() {
 }*/
 
 import React, { useState } from 'react';
-import axios from "axios";
-import "./AddProduct.css";
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './AddProduct.css';
 
 export default function AddProduct() {
-  const authid= localStorage.getItem('authid')
+
+  const navigate = useNavigate();
+  const authid = localStorage.getItem('authid');
   const [formData, setFormData] = useState({
     sellerid: authid,
     productName: '',
@@ -219,26 +222,52 @@ export default function AddProduct() {
     productType: '',
     category: '',
     brand: '',
-    image: '',
-    description: ''
+    quantity: '',
+    image1: null, // Initialize image fields with null
+    image2: null,
+    image3: null,
+    image4: null,
+    description: '',
   });
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === 'file' ? e.target.files[0] : value
-    }));
+    if (type === 'file') {
+      setFormData({
+        ...formData,
+        [name]: e.target.files[0], // Update the image fields with the selected file
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData)
-      await axios.post('http://localhost:8000/api/products/addproduct', formData, {
+      const form = new FormData();
+      form.append('sellerid', formData.sellerid);
+      form.append('productName', formData.productName);
+      form.append('price', formData.price);
+      form.append('productType', formData.productType);
+      form.append('category', formData.category);
+      form.append('brand', formData.brand);
+      form.append('quantity', formData.quantity);
+      form.append('image1', formData.image1);
+      form.append('image2', formData.image2);
+      form.append('image3', formData.image3);
+      form.append('image4', formData.image4);
+      form.append('description', formData.description);
+
+      await axios.post('http://localhost:8000/api/products/addproduct', form, {
         headers: {
-          'Content-Type': 'multipart/form-data',}});
-          
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
       setFormData({
         sellerid: authid,
         productName: '',
@@ -246,22 +275,28 @@ export default function AddProduct() {
         productType: '',
         category: '',
         brand: '',
-        image: null,
-        description: ''
+        quantity: '',
+        image1: null,
+        image2: null,
+        image3: null,
+        image4: null,
+        description: '',
       });
-      alert("Product Added successfully");
+
+      alert('Product Added successfully');
+      navigate('/Profile');
     } catch (error) {
       console.error('Error adding product:', error);
-      alert("Error adding product:");
+      alert('Error adding product:');
     }
   };
 
   return (
     <div>
+      <div>
+        <div className="usform">
+          <form className="usraddform" onSubmit={handleSubmit}>
 
-<div>
-<div className='usform'>
-      <form className="usraddform" onSubmit={handleSubmit}>
       <input
         type="text"
         placeholder="Product Name"
@@ -318,11 +353,12 @@ export default function AddProduct() {
       >
         <option value="">Select Category</option>
         <option value="car">Car</option>
-        <option value="headphone">HeadPhone</option>
+        <option value="Refrigerator">Refrigerator</option>
         <option value="Watch">Watch</option>
-        <option value="bike">Bike</option>
+        <option value="sports">Sports</option>
         <option value="mobile">Mobile</option>
         <option value="tv">TV</option>
+        <option value="washing machine">Washing Machine</option>
       </select>
 
       <input
@@ -333,14 +369,50 @@ export default function AddProduct() {
         onChange={handleChange}
       />
 
-      <label htmlFor="image">Image</label>
       <input
-        type="file"
-        name="image"
-        accept="image/*"
+        type="number"
+        placeholder='Quantity'
+        name="quantity"
+        min="1" max="120"
+        value={formData.quantity}
         onChange={handleChange}
-        required
       />
+
+<label htmlFor="image1">Image 1</label>
+            <input
+              type="file"
+              name="image1"
+              accept="image/*"
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="image2">Image 2</label>
+            <input
+              type="file"
+              name="image2"
+              accept="image/*"
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="image3">Image 3</label>
+            <input
+              type="file"
+              name="image3"
+              accept="image/*"
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="image4">Image 4</label>
+            <input
+              type="file"
+              name="image4"
+              accept="image/*"
+              onChange={handleChange}
+              required
+            />
 
       <textarea
         name="description"

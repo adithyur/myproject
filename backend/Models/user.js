@@ -29,6 +29,12 @@ const userSchema = mongoose.Schema({
         type: String,
         enum: ['active', 'deactivate', 'removed'],
         default: 'active'
+    },
+    question: {
+        type: String,
+    },
+    answer: {
+        type: String,
     }
 
 });

@@ -1,5 +1,5 @@
 import React, { useState ,useEffect } from 'react';
-
+import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 import './ApproveProduct.css'
 import { AiOutlineHome, AiFillHome } from 'react-icons/ai';
@@ -13,6 +13,9 @@ function ApproveProduct() {
 
     const [product,setProduct]= useState([]);
     const [selectedProduct, setSelectedProduct] = useState([]);
+    const [showLogoutOverlay, setShowLogoutOverlay] = useState(false);
+
+    const navigate=useNavigate()
 
     const fetchUnverifiedProducts = async () => {
       try {
@@ -64,6 +67,15 @@ function ApproveProduct() {
         console.log('No product selected for decline');
       }
     };
+
+    const logout = () => {
+      setShowLogoutOverlay(true); 
+    }
+  
+    const handleLogoutOrder = () => {
+      localStorage.removeItem('authid')
+      navigate('/')
+    };
     
 
 
@@ -103,9 +115,9 @@ function ApproveProduct() {
               </tr>
               <tr>
                 <td className='verifierhomedashtd2'>
-                    <div className='verifierdashdiv2'>
+                    <div href='/UpdateOrder' className='verifierdashdiv2'>
                         <FaEye style={{fontSize: '22'}}/>
-                        <a className='dashtxt' style={{marginLeft:'5px'}}>UPDATE ORDERS</a>
+                        <a href='/UpdateOrder' className='dashtxt' style={{marginLeft:'5px'}}>UPDATE ORDERS</a>
                     </div>
                 </td>
               </tr>
@@ -113,16 +125,24 @@ function ApproveProduct() {
                 <td className='verifierhomedashtd2'>
                     <div className='verifierdashdiv2'>
                         <FaEye style={{fontSize: '22'}}/>
-                        <a href='UpdateOrder' className='dashtxt' style={{marginLeft:'5px'}}>VIEW COMPLAINTS</a>
+                        <a className='dashtxt' style={{marginLeft:'5px'}}>VIEW COMPLAINTS</a>
                     </div>
                 </td>
               </tr>
               <tr>
-                <td className='verifierhomedashtd2'>
-                    <div className='verifierdashdiv2'>
-                        <BiLogOut style={{fontSize: '22'}}/>
-                        <a className='dashtxt' style={{marginLeft:'5px'}}>LOGOUT</a>
+              <td className='verifierhomedashtd' style={{cursor:'pointer'}}>
+                <BiLogOut style={{fontSize: '22'}}/>
+                <a onClick={logout} className='dashtxt' style={{marginLeft:'5px'}}>LOGOUT</a>
+                {showLogoutOverlay && (
+                    <div className="overlay">
+                      <div className="overlay-content">
+                        <h2>Signing Off</h2>
+                        <p>Are you sure you want to logout?</p>
+                        <button onClick={handleLogoutOrder}>Yes, Cancel</button>
+                        <button onClick={() => setShowLogoutOverlay(false)}>No, Go Back</button>
+                      </div>
                     </div>
+                  )}
                 </td>
               </tr>
             </table>

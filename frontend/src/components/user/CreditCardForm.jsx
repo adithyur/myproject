@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Payment.css'
 
 function PaymentPage() {
@@ -11,6 +11,7 @@ const orderId = searchParams.get('orderId');
 const productId = searchParams.get('productId');
 const authid = localStorage.getItem('authid');
 const currentDate = new Date();
+const navigate = useNavigate();
 //console.log("product id : ", productId);
 
   const [paymentMethod, setPaymentMethod] = useState('card');
@@ -61,7 +62,7 @@ const currentDate = new Date();
         };
   
         const transactionResponse = await axios.post(`http://localhost:8000/api/transaction/cod`, dataToSend);
-  
+   
         if (transactionResponse.status === 201) {
           console.log('Transaction details saved successfully.');
           const transactionId = transactionResponse.data.transactionId;
@@ -77,6 +78,27 @@ const currentDate = new Date();
                 console.log('Product deleted from the cart.');
               } else {
                 console.error('Error deleting product from the cart:', deleteProductResponse.data.message);
+              }
+
+              const getOrderDetailsResponse = await axios.post(`http://localhost:8000/api/order/getOrderDetails/${orderId}`);
+
+              if (getOrderDetailsResponse.status === 200) {
+                const orderData = getOrderDetailsResponse.data.quantity;
+                const quantity = orderData;
+                console.log("Quantity from order:", quantity);
+
+                const updateQuantityResponse = await axios.put(`http://localhost:8000/api/products/updateQuantityminus/${productId}`, {
+                  quantity: quantity,
+                });
+
+                if (updateQuantityResponse.status === 200) {
+                  console.log('Quantity updated successfully');
+                  navigate('/Orders');
+                } else {
+                  console.error('Error updating quantity:', updateQuantityResponse.data.message);
+                }
+              } else {
+                console.error('Error getting order details:', getOrderDetailsResponse.data.message);
               }
 
             } else {
@@ -123,10 +145,32 @@ const currentDate = new Date();
               console.log('Order status updated to confirmed.');
 
               const deleteProductResponse = await axios.delete(`http://localhost:8000/api/cart/cart/${authid}/${productId}`);
+
               if (deleteProductResponse.status === 200) {
                 console.log('Product deleted from the cart.');
               } else {
                 console.error('Error deleting product from the cart:', deleteProductResponse.data.message);
+              }
+
+              const getOrderDetailsResponse = await axios.post(`http://localhost:8000/api/order/getOrderDetails/${orderId}`);
+
+              if (getOrderDetailsResponse.status === 200) {
+                const orderData = getOrderDetailsResponse.data.quantity;
+                const quantity = orderData;
+                console.log("Quantity from order:", quantity);
+
+                const updateQuantityResponse = await axios.put(`http://localhost:8000/api/products/updateQuantityminus/${productId}`, {
+                  quantity: quantity,
+                });
+
+                if (updateQuantityResponse.status === 200) {
+                  console.log('Quantity updated successfully');
+                  navigate('/Orders');
+                } else {
+                  console.error('Error updating quantity:', updateQuantityResponse.data.message);
+                }
+              } else {
+                console.error('Error getting order details:', getOrderDetailsResponse.data.message);
               }
 
             } else {
@@ -174,6 +218,8 @@ const currentDate = new Date();
                 value={cardNumber}
                 onChange={handleCardNumberChange}
                 placeholder="1234 5678 9012 3456"
+                pattern="^(?!0{1,16}$)\d{16}$"
+                title="Please enter a valid 16-digit credit card number."
                 required
               />
             </div>
@@ -184,7 +230,7 @@ const currentDate = new Date();
                 id="cardHolder"
                 value={cardHolder}
                 onChange={handleCardHolderChange}
-                placeholder="John Doe"
+                placeholder="Kittunni"
                 required
               />
             </div>
@@ -199,17 +245,17 @@ const currentDate = new Date();
                 >
                   <option value="">Month</option>
                   <option value="01">01</option>
-              <option value="02">02</option>
-              <option value="03">03</option>
-              <option value="04">04</option>
-              <option value="05">05</option>
-              <option value="06">06</option>
-              <option>07</option>
-              <option>08</option>
-              <option>09</option>
-              <option>10</option>
-              <option>11</option>
-              <option>12</option>
+                  <option value="02">02</option>
+                  <option value="03">03</option>
+                  <option value="04">04</option>
+                  <option value="05">05</option>
+                  <option value="06">06</option>
+                  <option value="07">07</option>
+                  <option value="08">08</option>
+                  <option value="09">09</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
                 </select>
                 <select
                   id="expirationYear"
@@ -218,16 +264,16 @@ const currentDate = new Date();
                   required
                 >
                   <option value="">Year</option>
-                  <option value="2016">2016</option>
-              <option>2017</option>
-              <option>2018</option>
-              <option>2019</option>
-              <option>2020</option>
-              <option>2021</option>
-              <option>2022</option>
-              <option>2023</option>
-              <option>2024</option>
-              <option>2025</option>
+                  <option value="2024">2024</option>
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                  <option value="2027">2027</option>
+                  <option value="2028">2028</option>
+                  <option value="2029">2029</option>
+                  <option value="2030">2030</option>
+                  <option value="2031">2031</option>
+                  <option value="2032">2032</option>
+                  <option value="2033">2033</option>
                 </select>
               </div>
             </div>
@@ -239,6 +285,8 @@ const currentDate = new Date();
                 value={ccv}
                 onChange={handleCcvChange}
                 placeholder="123"
+                pattern="^(?!0{1,16}$)\d{3}$"
+                title="Please enter a valid 3-digit CCV number."
                 required
               />
             </div>

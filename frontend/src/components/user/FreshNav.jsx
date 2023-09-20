@@ -64,8 +64,8 @@ function FreshNav() {
       <a className="pnav" style={{textAlign:'left', fontWeight:'bold', fontSize:'30px', fontFamily:'unset', paddingTop:'5px'}} href='/UserHome'>New2U</a>
       <div className="navbar2">
         <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'10px', color:'black'}} onClick={()=>{navigate('/FreshProduct')}}>Fresh</div> 
-        <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px', color:'gray'}}>Refurbished</div>
-        <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px', color:'gray'}}>Both</div>
+        <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px', color:'gray'}} onClick={()=>{navigate('/ReProduct')}}>Refurbished</div>
+        <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px', color:'gray'}} onClick={()=>{navigate('/UserHome')}}>Both</div>
         <div className="search-bar2">
           <input className='navtext2'type="text" placeholder="Search your products" />
           <button className='navbutton2'><FaSearch/></button>

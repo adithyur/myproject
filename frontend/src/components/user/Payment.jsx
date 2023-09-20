@@ -1,134 +1,210 @@
-import React from 'react'
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Payment.css'
 
 function Payment() {
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const orderId = searchParams.get('orderId');
+  const productId = searchParams.get('productId');
+  const authid = localStorage.getItem('authid');
+  const currentDate = new Date();
+  const navigate = useNavigate();
+  //console.log("product id : ", productId);
+
+    const [paymentMethod, setPaymentMethod] = useState('card');
+    const [cardNumber, setCardNumber] = useState('');
+    const [cardHolder, setCardHolder] = useState('');
+    const [expirationMonth, setExpirationMonth] = useState('');
+    const [expirationYear, setExpirationYear] = useState('');
+    const [ccv, setCcv] = useState('');
+
+    const handlePaymentMethodChange = (e) => {
+      setPaymentMethod(e.target.value);
+    };
+
+    const handleCardNumberChange = (e) => {
+      setCardNumber(e.target.value);
+    };
+
+    const handleCardHolderChange = (e) => {
+      setCardHolder(e.target.value);
+    };
+
+    const handleExpirationMonthChange = (e) => {
+      setExpirationMonth(e.target.value);
+    };
+
+    const handleExpirationYearChange = (e) => {
+      setExpirationYear(e.target.value);
+    };
+
+    const handleCcvChange = (e) => {
+      setCcv(e.target.value);
+    };
+
+    const handlePaymentSubmit = async (e) => {
+      e.preventDefault();
+  
+      const paymentData = {
+        cardNumber,
+        cardHolder,
+        expirationMonth,
+        expirationYear,
+        ccv,
+      };
+  
+      try {
+        const currentDate = new Date().toISOString();
+        const dataToSend = {
+          userid: localStorage.getItem('authid'),
+          orderid: orderId,
+          mode: paymentMethod,
+          date: currentDate,
+        };
+  
+        const transactionResponse = await axios.post(`http://localhost:8000/api/transaction/createTransaction`, dataToSend);
+  
+        if (transactionResponse.status === 201) {
+          console.log('Transaction details saved successfully.');
+          const transactionId = transactionResponse.data.transactionId;
+          
+          if (transactionId) {
+            console.log('Transaction ID:', transactionId);
+            const updateOrderResponse = await axios.put(`http://localhost:8000/api/order/confirmOrder/${orderId}`, { transactionId });
+            if (updateOrderResponse.status === 200) {
+              console.log('Order status updated to confirmed.');
+
+              const deleteProductResponse = await axios.delete(`http://localhost:8000/api/cart/cart/${authid}/${productId}`);
+
+              if (deleteProductResponse.status === 200) {
+                console.log('Product deleted from the cart.');
+                navigate('/Orders');
+              } else {
+                console.error('Error deleting product from the cart:', deleteProductResponse.data.message);
+              }
+
+            } else {
+              console.error('Error updating order status:', updateOrderResponse.data.message);
+            }
+          } else {
+            console.error('Transaction ID not found in the response.');
+          }
+        } else {
+          console.error('Error saving transaction details:', transactionResponse.data.message);
+        }
+      } catch (error) {
+        console.error('Error sending payment data:', error);
+      }
+  };
     
   return (
-    <div>
-        <div>
-  <div className="checkout">
-    <div className="credit-card-box">
-      <div className="flip">
-        <div className="front">
-          <div className="chip" />
-          <div className="logo">
-            <svg version="1.1" id="visa" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="47.834px" height="47.834px" viewBox="0 0 47.834 47.834" style={{enableBackground: 'new 0 0 47.834 47.834'}}>
-              <g>
-                <g>
-                  <path d="M44.688,16.814h-3.004c-0.933,0-1.627,0.254-2.037,1.184l-5.773,13.074h4.083c0,0,0.666-1.758,0.817-2.143
-                   c0.447,0,4.414,0.006,4.979,0.006c0.116,0.498,0.474,2.137,0.474,2.137h3.607L44.688,16.814z M39.893,26.01
-                   c0.32-0.819,1.549-3.987,1.549-3.987c-0.021,0.039,0.317-0.825,0.518-1.362l0.262,1.23c0,0,0.745,3.406,0.901,4.119H39.893z
-                   M34.146,26.404c-0.028,2.963-2.684,4.875-6.771,4.875c-1.743-0.018-3.422-0.361-4.332-0.76l0.547-3.193l0.501,0.228
-                   c1.277,0.532,2.104,0.747,3.661,0.747c1.117,0,2.313-0.438,2.325-1.393c0.007-0.625-0.501-1.07-2.016-1.77
-                   c-1.476-0.683-3.43-1.827-3.405-3.876c0.021-2.773,2.729-4.708,6.571-4.708c1.506,0,2.713,0.31,3.483,0.599l-0.526,3.092
-                   l-0.351-0.165c-0.716-0.288-1.638-0.566-2.91-0.546c-1.522,0-2.228,0.634-2.228,1.227c-0.008,0.668,0.824,1.108,2.184,1.77
-                   C33.126,23.546,34.163,24.783,34.146,26.404z M0,16.962l0.05-0.286h6.028c0.813,0.031,1.468,0.29,1.694,1.159l1.311,6.304
-                   C7.795,20.842,4.691,18.099,0,16.962z M17.581,16.812l-6.123,14.239l-4.114,0.007L3.862,19.161
-                   c2.503,1.602,4.635,4.144,5.386,5.914l0.406,1.469l3.808-9.729L17.581,16.812L17.581,16.812z M19.153,16.8h3.89L20.61,31.066
-                   h-3.888L19.153,16.8z" />
-                </g>
-              </g>
-            </svg>
-          </div>
-          <div className="number" />
-          <div className="card-holder">
-            <label>Card holder</label>
-            <div />
-          </div>
-          <div className="card-expiration-date">
-            <label>Expires</label>
-            <div />
-          </div>
-        </div>
-        <div className="back">
-          <div className="strip" />
-          <div className="logo">
-            <svg version="1.1" id="visa" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="47.834px" height="47.834px" viewBox="0 0 47.834 47.834" style={{enableBackground: 'new 0 0 47.834 47.834'}}>
-              <g>
-                <g>
-                  <path d="M44.688,16.814h-3.004c-0.933,0-1.627,0.254-2.037,1.184l-5.773,13.074h4.083c0,0,0.666-1.758,0.817-2.143
-                   c0.447,0,4.414,0.006,4.979,0.006c0.116,0.498,0.474,2.137,0.474,2.137h3.607L44.688,16.814z M39.893,26.01
-                   c0.32-0.819,1.549-3.987,1.549-3.987c-0.021,0.039,0.317-0.825,0.518-1.362l0.262,1.23c0,0,0.745,3.406,0.901,4.119H39.893z
-                   M34.146,26.404c-0.028,2.963-2.684,4.875-6.771,4.875c-1.743-0.018-3.422-0.361-4.332-0.76l0.547-3.193l0.501,0.228
-                   c1.277,0.532,2.104,0.747,3.661,0.747c1.117,0,2.313-0.438,2.325-1.393c0.007-0.625-0.501-1.07-2.016-1.77
-                   c-1.476-0.683-3.43-1.827-3.405-3.876c0.021-2.773,2.729-4.708,6.571-4.708c1.506,0,2.713,0.31,3.483,0.599l-0.526,3.092
-                   l-0.351-0.165c-0.716-0.288-1.638-0.566-2.91-0.546c-1.522,0-2.228,0.634-2.228,1.227c-0.008,0.668,0.824,1.108,2.184,1.77
-                   C33.126,23.546,34.163,24.783,34.146,26.404z M0,16.962l0.05-0.286h6.028c0.813,0.031,1.468,0.29,1.694,1.159l1.311,6.304
-                   C7.795,20.842,4.691,18.099,0,16.962z M17.581,16.812l-6.123,14.239l-4.114,0.007L3.862,19.161
-                   c2.503,1.602,4.635,4.144,5.386,5.914l0.406,1.469l3.808-9.729L17.581,16.812L17.581,16.812z M19.153,16.8h3.89L20.61,31.066
-                   h-3.888L19.153,16.8z" />
-                </g>
-              </g>
-            </svg>
-          </div>
-          <div className="ccv">
-            <label>CCV</label>
-            <div />
-          </div>
-        </div>
+    <div className="payment-container">
+    <h2>Payment Information</h2>
+    <form onSubmit={handlePaymentSubmit}>
+      <div className="form-group">
+        <label htmlFor="paymentMethod">Payment Method</label>
+        <select
+          id="paymentMethod"
+          value={paymentMethod}
+          onChange={handlePaymentMethodChange}
+        >
+          <option value="card">Credit/Debit Card</option>
+        </select>
       </div>
-    </div>
-    <form className="form" autoComplete="off" noValidate>
-      <fieldset>
-        <label htmlFor="card-number">Card Number</label>
-        <input type="num" id="card-number" className="input-cart-number" maxLength={4} />
-        <input type="num" id="card-number-1" className="input-cart-number" maxLength={4} />
-        <input type="num" id="card-number-2" className="input-cart-number" maxLength={4} />
-        <input type="num" id="card-number-3" className="input-cart-number" maxLength={4} />
-      </fieldset>
-      <fieldset>
-        <label htmlFor="card-holder">Card holder</label>
-        <input type="text" id="card-holder" />
-      </fieldset>
-      <fieldset className="fieldset-expiration">
-        <label htmlFor="card-expiration-month">Expiration date</label>
-        <div className="select">
-          <select id="card-expiration-month">
-            <option />
-            <option>01</option>
-            <option>02</option>
-            <option>03</option>
-            <option>04</option>
-            <option>05</option>
-            <option>06</option>
-            <option>07</option>
-            <option>08</option>
-            <option>09</option>
-            <option>10</option>
-            <option>11</option>
-            <option>12</option>
-          </select>
+
+      
+        <div>
+          <div className="form-group">
+            <label htmlFor="cardNumber">Card Number</label>
+            <input
+              type="text"
+              id="cardNumber"
+              value={cardNumber}
+              onChange={handleCardNumberChange}
+              placeholder="1234 5678 9012 3456"
+              pattern="^(?!0{1,16}$)\d{16}$"
+              title="Please enter a valid 16-digit credit card number."
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="cardHolder">Card Holder</label>
+            <input
+              type="text"
+              id="cardHolder"
+              value={cardHolder}
+              onChange={handleCardHolderChange}
+              placeholder="Kittunni"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="expirationMonth">Expiration Date</label>
+            <div className="expiration-date">
+              <select
+                id="expirationMonth"
+                value={expirationMonth}
+                onChange={handleExpirationMonthChange}
+                required
+              >
+                <option value="">Month</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
+              <select
+                id="expirationYear"
+                value={expirationYear}
+                onChange={handleExpirationYearChange}
+                required
+              >
+                <option value="">Year</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+                <option value="2031">2031</option>
+                <option value="2032">2032</option>
+                <option value="2033">2033</option>
+              </select>
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="ccv">CCV</label>
+            <input
+              type="text"
+              id="ccv"
+              value={ccv}
+              onChange={handleCcvChange}
+              placeholder="123"
+              pattern="^(?!0{1,16}$)\d{3}$"
+              title="Please enter a valid 3-digit CCV number."
+              required
+            />
+          </div>
         </div>
-        <div className="select">
-          <select id="card-expiration-year">
-            <option />
-            <option>2016</option>
-            <option>2017</option>
-            <option>2018</option>
-            <option>2019</option>
-            <option>2020</option>
-            <option>2021</option>
-            <option>2022</option>
-            <option>2023</option>
-            <option>2024</option>
-            <option>2025</option>
-          </select>
-        </div>
-      </fieldset>
-      <fieldset className="fieldset-ccv">
-        <label htmlFor="card-ccv">CCV</label>
-        <input type="text" id="card-ccv" maxLength={3} />
-      </fieldset>
-      <button className="btn"><i className="fa fa-lock" /> submit</button>
+
+      <button type="submit" className="submit-button">
+        {paymentMethod === 'cod' ? 'Place Order (COD)' : 'Pay Now'}
+      </button>
     </form>
   </div>
-  <a className="the-most" target="_blank" href="https://codepen.io/2016/popular/pens/9/">
-    <img src="https://raw.githubusercontent.com/supahfunk/supah-codepen/master/themost-2016.png" />
-  </a>
-</div>
-
-    </div>
-  )
+);
 }
 
 export default Payment

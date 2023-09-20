@@ -13,7 +13,8 @@ function UserCategory() {
     const fetchProducts = async () => {
       try {
         const res=await axios.get(`http://localhost:8000/api/products/getcategory/${category}`)
-        //console.log("Products:", res.data); 
+        
+        console.log("Products:", res.data); 
   
         const productsWithRatings = await Promise.all(
           res.data.map(async (product) => {

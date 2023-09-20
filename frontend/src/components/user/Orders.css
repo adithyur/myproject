@@ -1,7 +1,7 @@
 .OrderHistroyth{
     font-size: large;
     font-family: "Arial", sans-serif;
-    padding-left: 25px;
+    padding-left: 10px;
     height: 75px;
     text-align: center;
     border-bottom: 1px solid #ddd;
@@ -11,4 +11,26 @@
 
 .OrderHistroytr{
     border-style:dashed;
+}
+
+.OrderHistroytd1{
+    font-size: large;
+    font-family: "Arial", sans-serif;
+    padding-left: 10px;
+    height: 75px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    width: 100px;
+
+}
+
+.OrderHistroytd{
+    font-size: large;
+    font-family: "Arial", sans-serif;
+    padding-left: 10px;
+    height: 75px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    width: 150px;
+
 }

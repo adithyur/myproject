@@ -25,6 +25,13 @@ import "./Navbar.css"
 function NavScrollExample() {
 
   const navigate=useNavigate()
+  const [searchData, setSearchData] = useState('');
+
+  const searchProduct =  () => {
+    navigate(`/SearchPro?searchdata=${searchData}`);
+  }
+
+
 
   return (
     
@@ -32,19 +39,23 @@ function NavScrollExample() {
       <div style={{height:'80px', borderBottom:'1px solid rgb(225, 217, 217)', marginTop:'30px', marginLeft:'100px', display:'flex', marginRight:'100px',/*backgroundColor:'blanchedalmond'*/ }}>
         <a className="pnav" href="/" style={{textAlign:'left', fontWeight:'bold', fontSize:'30px', fontFamily:'unset', paddingTop:'5px'}}>New2U</a>
         <div className="navbar2">
-          <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'10px'}}>Fresh</div>
-          <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px'}}>Refurbished</div>
-          <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px'}}>Both</div>
+          <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'10px'}} onClick={()=>{navigate('/FreshProduct')}}>Fresh</div>
+          <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px'}} onClick={()=>{navigate('/ReProduct')}}>Refurbished</div>
+          <div className="nav-item2" style={{ paddingleft:'10px', paddingRight:'15px', marginLeft:'-15px'}} onClick={()=>{navigate('/UserHome')}}>Both</div>
           <div className="search-bar2">
-            <input className='navtext2'type="text" placeholder="Search your products" />
-            <button className='navbutton2'><FaSearch/></button>
+            <input className='navtext2'type="text"
+                                        name="search"
+                                        value={searchData}
+                                        onChange={(e) => setSearchData(e.target.value)}  
+                                        placeholder="Search your products" />
+            <button className='navbutton2' onClick={searchProduct}><FaSearch/></button>
           </div>
         </div>
         <div style={{display:'flex',textAlign:'left', marginLeft:'220px', marginTop:'15px'}}>    
-          <a style={{fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/Cart">
+          <a style={{fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/login">
             <FaShoppingCart size={22} className='pnav-icon'/>  Cart</a>
 
-          <a style={{paddingLeft:'25px', fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/Wishlist">
+          <a style={{paddingLeft:'25px', fontWeight:'bold', fontSize:'20px'}} className='pnav' href="/login">
             <AiFillHeart size={24} className='pnav-icon'/> Wishlist
           </a>
 
@@ -54,7 +65,7 @@ function NavScrollExample() {
         </div>
       </div>
 
-      <div style={{display:'flex', borderBottom:'1px solid rgb(225, 217, 217)',height: '100px',marginLeft:'100px',marginRight:'100px'}}>
+      <div style={{display:'flex', borderBottom:'1px solid rgb(225, 217, 217)',height: '100px',marginLeft:'300px',marginRight:'300px'}}>
 
           <a onClick={()=>{navigate(`/Category?category=${'mobile'}`)}} children="nav-item" className='homeicon'>
             <CiMobile3 size={28}/>
@@ -79,18 +90,6 @@ function NavScrollExample() {
             <span>Washing machine</span>
           </a>
 
-          <a onClick={()=>{navigate(`/Category?category=${'bike'}`)}} className='homeicon2'>
-            <TbMotorbike size={28}/>
-            <br></br>
-            <span>Bike</span>
-          </a>
-
-          <a onClick={()=>{navigate(`/Category?category=${'car'}`)}} className='homeicon2'>
-            <BsCarFront size={28}/>
-            <br></br>
-            <span>Car</span>
-          </a>
-
           <a onClick={()=>{navigate(`/Category?category=${'watches'}`)}} className='homeicon2'>
             <FiWatch size={28}/>
             <br></br>
@@ -104,7 +103,7 @@ function NavScrollExample() {
           </a>
 
           <a onClick={()=>{navigate(`/Category?category=${'tv'}`)}} className='homeicon2'>
-            <CiMobile3 size={28}/>
+            <AiOutlineLaptop size={28}/>
             <br></br>
             <span>Television</span>
           </a>
@@ -115,9 +114,9 @@ function NavScrollExample() {
             <span className="text">Sports</span>
           </a>
 
-          <div className='filter'>
+          {/*<div className='filter'>
             <p className='filterp'> <BsToggles2/>Filter</p>
-          </div>
+  </div>*/}
           
  
       </div>

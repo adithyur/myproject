@@ -88,6 +88,7 @@ router.get('/dsplywaiting/:userid', async (req, res) => {
       productId: order.productid._id,
       productDetails: order.productid,
       total: order.total,
+      price: order.price,
       quantity: order.quantity,
       orderid: order._id,
     }));
@@ -143,6 +144,8 @@ router.post('/profile/:orderId', async (req, res) => {
         sellerid: order.sellerid,
         status: order.status,
         total: order.total,
+        quantity: order.quantity,
+        place:order.place,
       }));
   
       res.json(data);
@@ -226,12 +229,24 @@ router.post('/viewveriOrder', async (req, res) => {
       userid: order.userid,
       status: order.status,
       total: order.total,
+      quantity: order.quantity,
+      place: order.place,
     }));
 
     res.json(data);
   } catch (error) {
     console.error('Error fetching order history:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.get('/all', async (req, res) => {
+  try {
+    const orders = await Order.find();
+    res.json(orders);
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
@@ -390,9 +405,14 @@ router.get('/getOrderIdIf/:orderId', async (req, res) => {
   }
 });
 
-
-
-
-
+router.get('/countOrders', async (req, res) => {
+  try {
+    const orderCount = await Order.countDocuments({ status: 'Delivered' });
+    res.json({ count: orderCount });
+  } catch (error) {
+    console.error('Error counting order:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
   module.exports = router;

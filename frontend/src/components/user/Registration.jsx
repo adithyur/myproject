@@ -10,7 +10,7 @@ export default function Registration() {
 
   const navigate=useNavigate()
 
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', repassword:'', trade: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', repassword:'', trade: '', securityQuestion: '', securityAnswer: '', });
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -29,7 +29,14 @@ export default function Registration() {
       if (formData.password===formData.repassword){
       console.log(formData)
       await axios.post('http://localhost:8000/api/user/reguser', formData);
-      setFormData({ name: '', email: '', password: '', trade: '' });
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        trade: '',
+        securityQuestion: '',
+        securityAnswer: '',
+      });
       alert("Registration successfully")
       navigate('/login')
       }
@@ -52,7 +59,7 @@ export default function Registration() {
     <h2>Registration</h2>
     <form onSubmit={handleSubmit}>
     <BiUser className='ic'/>
-      <input className="t1" 
+      <input className="t1"  style={{width:'200px', borderRadius:'10px'}}
         type="text" 
         placeholder="Name"
         name="name"
@@ -129,14 +136,44 @@ export default function Registration() {
   <label className='but' for="both">Both</label>
   <br/>
   <br/>
+  <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
   </div>
-      <br/>
-      <br/>
-      <br/>
-      <input ClassName="check" type="checkbox" id="terms" required/>
-      <label for="terms">I agree to the Terms and Conditions</label>
-      <br/>
-      <br/>
+{/*
+  <div className="security-question">
+  <select
+    style={{ marginTop: '25px',}}
+    name="securityQuestion"
+    id="securityQuestion"
+    value={formData.securityQuestion}
+    onChange={handleChange}
+    required
+  >
+    <option value="">Select a Security Question</option>
+    <option value="q1">What is your favorite book or movie?</option>
+    <option value="q2">What is your favorite sports team?</option>
+    <option value="q3">What is the name of your favorite childhood friend?</option>
+  </select>
+</div>
+
+        <CiMail className='ic'/>
+        <input 
+          className="t1 security-answer-input"
+          type="text"
+          placeholder="Answer"
+          name="securityAnswer"
+          value={formData.securityAnswer}
+          onChange={handleChange}
+          required
+        />
+        <br />
+        <br />
+      {/*<input ClassName="check" type="checkbox" id="terms" required/>
+      <label for="terms">I agree to the Terms and Conditions</label>*/}
+      
       <button className="reg" role="button"><span class="text1">SIGN UP</span></button>
     </form>
   </div>

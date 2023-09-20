@@ -18,16 +18,6 @@ export default function Profile() {
     const [userName, setUserName] = useState('');
     const [mailid, setMailId] = useState('');
     const navigate=useNavigate()
-    const [bio, setBio]= useState({ name:'',
-                                        mobile1:'',
-                                        pincode:'',
-                                        place:'',
-                                        address:'',
-                                        city:'',
-                                        state:'',
-                                        landmark:'',
-                                        mobile2:''
-                                     });
 
   const [isOpen, setIsOpen] = useState(false);
   const [showLogoutOverlay, setShowLogoutOverlay] = useState(false);
@@ -65,62 +55,6 @@ export default function Profile() {
     }
 
     };*/
-
-    const fetchBio = async () => {
-        try {
-          const res = await axios.get(`http://localhost:8000/api/profile/profile/${localStorage.getItem('authid')}`);
-          /*setFormFields(res.data)
-          console.log(formFields)*/
-          if(res){
-            setBio({name:res.data[0].name,
-          mobile1:res.data[0].mobile1,
-          pincode:res.data[0].pincode,
-          place:res.data[0].place,
-          address:res.data[0].address,
-          city:res.data[0].city,
-          state:res.data[0].state,
-          landmark:res.data[0].landmark,
-          mobile2:res.data[0].mobile2});
-
-        console.log(res.data[0].fname)}
-
-          else{
-            alert("thenj poyi gooyis")
-          }
-          
-          /*console.log('profile',bio);*/
-        } catch (error) {
-          console.error('Error fetching profile:', error);
-        }
-      };
-      useEffect(() => {
-        fetchBio()
-    },[])
-
-     const handlechange = (e) => {
-      const { name, value, type } = e.target;
-      setBio((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-    const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if(bio.mobile1===bio.mobile2){
-        alert("use different mobile number as secondary")
-      }
-      else{
-        console.log(bio)
-        await axios.post(`http://localhost:8000/api/profile/update/${localStorage.getItem('authid')}`, bio)
-        alert("Address Added successfully");
-      }   
-    } catch (error) {
-      console.error('Error adding Address:', error);
-      alert("Error adding Address:");
-    }
-  };
 
   useEffect(() => {
         const fetchUserName = async () => {
@@ -224,13 +158,15 @@ export default function Profile() {
                     </div>
 
                     <div className='box' style={{marginLeft:'50px'}}>
+                    <Link to='/ContactUs' style={{ textDecoration: 'none', color: 'inherit' }}>
                       <MdOutlineConnectWithoutContact size={35}/>
                       <br/>
                       <p style={{paddingTop:'10px',fontWeight:'600', fontSize:'20px', fontFamily:'times new roman'}}> Contact us</p>
                       <p style={{color:'gray'}}>Touch in with our team.</p>
+                    </Link>
                     </div>
 
-                  </div>
+                  </div> 
 
               </div>
 
@@ -254,10 +190,13 @@ export default function Profile() {
             </div>
             
           </div>
-          <div style={{ marginTop:'100px'}}>
+          {/*<div style={{ marginTop:'100px'}}>
           Need to deactivate your account?
           <br/>
           <a style={{textDecoration:'underline', fontWeight:'bold', paddingBottom:'10px'}}>Take care of that now</a>
+                  </div>*/}
+          <div style={{marginTop:'50px'}}>
+            <button style={{border:'none', backgroundColor:'transparent', color:'transparent'}}>hi</button>
           </div>
     </div>
   );

@@ -18,6 +18,8 @@ function PickupAddress() {
                                      });
 
   const [isOpen, setIsOpen] = useState(false);
+  const [showUser, setShowUser] = useState(false);
+  const [showUser1, setShowUser1] = useState(false);
   const toggleDropdown = () => {
       setIsOpen(!isOpen);
   };
@@ -51,6 +53,7 @@ function PickupAddress() {
       };
       useEffect(() => {
         fetchBio()
+        handleCheck();
     },[])
 
      const handlechange = (e) => {
@@ -78,11 +81,31 @@ function PickupAddress() {
     }
   };
 
+  const handleCheck = async () => {
+    const res = await axios.get(`http://localhost:8000/api/user/userdetail/${localStorage.getItem('authid')}`);
+    const role= res.data.trade;
+    console.log('role : ',role)
+    if(role==='sell'){
+      setShowUser1(true);
+      
+    }
+    else{
+      setShowUser(true);
+    }
+  }
+
 
   return (
     <div className='flex2'>
       <div>
-        <NoIconNav/>
+          {showUser && (
+          < NoIconNav/> 
+          )}
+          {showUser1 && (
+                <div style={{height:'80px', borderBottom:'1px solid rgb(225, 217, 217)', marginTop:'30px', marginLeft:'100px', display:'flex', marginRight:'100px',/*backgroundColor:'blanchedalmond'*/ }}>
+                    <a className="pnav" style={{textAlign:'left', fontWeight:'bold', fontSize:'30px', fontFamily:'unset', paddingTop:'5px'}} href='/SellerHome'>New2U</a>
+                 </div>
+          )}
       </div>
 
       <div className='profilediv' >

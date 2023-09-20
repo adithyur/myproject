@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./ViewOrders.css"
 import { AiOutlineHome, AiFillHome } from 'react-icons/ai';
@@ -9,6 +10,8 @@ import { FaEye } from 'react-icons/fa';
 function ViewOrders() {
 
   const [orderHistory, setOrderHistory] = useState([]);
+  const [showLogoutOverlay, setShowLogoutOverlay] = useState(false);
+  const navigate=useNavigate()
 
   useEffect(() => {
     fetchOrderHistory();
@@ -22,6 +25,22 @@ function ViewOrders() {
       console.error('Error fetching order history:', error);
     }
   };
+
+  const logout = () => {
+    setShowLogoutOverlay(true); 
+  }
+
+  const handleLogoutOrder = () => {
+    localStorage.removeItem('authid')
+    navigate('/')
+  };
+
+  const orderDetail = (orderId, productId ) => {
+    /*console.log("order id  : ", orderId)
+    console.log("product id : ",productId)*/
+    navigate(`/AdOrderDetail?orderId=${orderId}&productId=${productId}`);
+  };
+
 
 
   return (
@@ -68,14 +87,24 @@ function ViewOrders() {
                 <td className='verifierhomedashtd2'>
                   <div className='verifierdashdiv1'>
                     <FaEye style={{fontSize: '22'}}/>
-                    <a href='UpdateOrder' className='dashtxt' style={{marginLeft:'5px'}}>VIEW COMPLAINTS</a>
+                    <a className='dashtxt' style={{marginLeft:'5px'}}>VIEW COMPLAINTS</a>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td className='verifierhomedashtd'>
+                <td className='verifierhomedashtd' style={{cursor:'pointer'}}>
                 <BiLogOut style={{fontSize: '22'}}/>
-                <a className='dashtxt' style={{marginLeft:'5px'}}>LOGOUT</a>
+                <a onClick={logout} className='dashtxt' style={{marginLeft:'5px'}}>LOGOUT</a>
+                {showLogoutOverlay && (
+                    <div className="overlay">
+                      <div className="overlay-content">
+                        <h2>Signing Off</h2>
+                        <p>Are you sure you want to logout?</p>
+                        <button onClick={handleLogoutOrder}>Yes, Cancel</button>
+                        <button onClick={() => setShowLogoutOverlay(false)}>No, Go Back</button>
+                      </div>
+                    </div>
+                  )}
                 </td>
               </tr>
             </table>
@@ -105,7 +134,7 @@ function ViewOrders() {
             <td className='verifierproduct_td'>₹{order.total}</td>
             <td className='verifierproduct_td'>{order.status}</td>
             <td>
-            <a style={{textDecoration:'underline', color:'blue'}}>View More</a>
+            <a onClick={() => orderDetail(order.orderId, order.product.productId)} style={{textDecoration:'underline',textDecorationColor:'blue', cursor:'pointer'}}>View More</a>
             </td>
           </tr>
 

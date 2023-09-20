@@ -12,6 +12,7 @@ function OrderDetails() {
     const searchParams = new URLSearchParams(location.search);
     const orderId = searchParams.get('orderId');
     const productId = searchParams.get('productId');
+    const [showButton, setShowButton] = useState(false);
 
     const [orderDetails, setOrderDetails] = useState(null);
     const [product, setProduct] = useState({});
@@ -95,7 +96,7 @@ function OrderDetails() {
       const status= res.data.status;
       //console.log("Order status:",status);
       if (status=== 'unpaid') {
-        navigate(`/CreditCardForm?orderId=${orderId}&productId=${productId}`);
+        navigate(`/Payment?orderId=${orderId}&productId=${productId}`);
         //console.log('Payment logic goes here');
       } else {
         alert('Payment has already been made for this order.');
@@ -133,6 +134,23 @@ function OrderDetails() {
       setShowCancelOverlay(false);
 
     };
+
+    const handleCheck = async () => {
+      const res = await axios.get(`http://localhost:8000/api/transaction/getTransactionDetails/${orderId}`);
+      const pay= res.data.mode;
+      console.log('role : ',pay)
+      if(pay==='cod'){
+        setShowButton(true);
+        
+      }
+      else{
+        setShowButton(false);
+      }
+    }
+
+    useEffect(() => {
+      handleCheck();
+  },[])
     
     
 
@@ -173,6 +191,8 @@ function OrderDetails() {
           <p>Payment Mode: {transactionDetails.mode}</p>
           <p>Amount: ₹ {transactionDetails.amount}</p>
           <p>Date: {transactionDetails.date}</p>
+
+          {showButton && (
           <button
   onClick={handleMakePayment}
   style={{
@@ -191,6 +211,7 @@ function OrderDetails() {
 >
   Make Payment
 </button>
+          )}
 
         </div>
       ) : (

@@ -81,11 +81,6 @@ function Checkout() {
       }
   };
 
-  const totalPrice = product.reduce((totals, cartItem) => {
-    const total = cartItem.total;
-    return totals + parseFloat(total);
-  }, 0);
-
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -288,17 +283,17 @@ function Checkout() {
                 <td>
                   <h4>{order.productDetails.productName}</h4>
                   <br></br>
-                  <h5 style={{color:'green'}}>₹ {order.total}</h5>
+                  <h5 style={{color:'green'}}>₹ {order.price}</h5>
                   <br></br>
                   <h5>Quantity : {order.quantity}</h5>
+                  <h4 style={{paddingTop:'10px', color:'green'}}> TOTAL ₹ {order.total} </h4>
                 </td>             
               </tr>
             </table>
             
             ))}
+            <button className="button-37" type="submit" onClick={handleCheckout} style={{marginTop:'70px'}}> Check Out </button>
           </div>
-          <h2 style={{paddingTop:'20px', color:'green'}}> TOTAL ₹ {totalPrice} </h2><br/>
-          <button className="button-37" type="submit" onClick={handleCheckout}> Check Out </button>
           
       </div>
     </div>

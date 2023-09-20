@@ -55,24 +55,19 @@ function ViewProduct() {
       <UserNav/>
   </div>
   <div className='Add'>
-      <div className='Add1'>
-          <div className='Add2'>
-              PRODUCT MANAGEMENT
-              <div className={`dropdown ${isOpen ? 'open' : ''}`}>
-<button className="dropdown-btn1" onClick={toggleDropdown}>
-  Product Management <i className="fa fa-caret-down" />
-</button>
-<div className="dropdown-content1">
-  <a href="/ViewProduct">View Product </a>
-  <a href="/ProductManagement">Add Product</a>
-  <a href="/UpdateProduct">Update Product</a>
-  <a href="/DeleteProduct">Delete Product</a>
-</div>
-</div>
+          <div style={{marginTop:'50px'}}>
+              <a href="/ViewProduct" style={{textDecorationColor:'black', color:'black', fontWeight:'bold',fontSize:'24px', fontFamily:'time new roman'}}>
+                  View Product
+              </a>
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              <a href="/AddProduct" style={{paddingleft:'25px', textDecorationColor:'black', color:'black', fontWeight:'bold',fontSize:'24px', fontFamily:'time new roman'}}>
+                  Add Product
+              </a>
 
-          </div>
+                    </div>
+                </div>
           <div className="table-container">
-          <table className='viewproduct_table'>
+          <table className='viewproduct_table' style={{ marginLeft:'200px',width:'70%', marginTop:'50px'}}>
       <thead>
         <tr className='viewproduct_tr'>
         <th className='viewproduct_th'></th>
@@ -116,8 +111,6 @@ function ViewProduct() {
               
           </div>
           
-      </div>
-      </div>
 </div>
 )
 }

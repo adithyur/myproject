@@ -1,70 +1,71 @@
-.usform{
-    background-color: rgb(255, 255, 255);
-    height: 100%;
-    padding-left: 250px;
+/* AddProduct.css */
+
+.usform {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
 }
 
-#description{
-    height: 30px;
-}
 .usraddform {
-    display: grid;
-    grid-template-columns: 1fr;
-    width: 80%;
-    grid-gap: 10px;
-    margin-left: 80px;
-    margin-top: 10px;
-  }
-  
-  .usraddform label {
-    margin-bottom: 4px;
-  }
-  
-  .usraddform input,
-  .usraddform select,
-  .usraddform textarea {
-    margin-bottom: 12px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .usraddform .radio-group {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-  
-  .usraddform button {
-    padding: 8px 16px;
-    background-image: linear-gradient(135deg, #f34079 40%, #fc894d);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    
-  }
-  
-  .usraddform button[type='submit'] {
-    margin-right: 8px;
-  }
-  
-  .usraddform button:focus {
-    outline: none;
-  }
-  
-  .usraddform button:disabled {
-    background-color: #870404;
-    cursor: not-allowed;
-  }
+  display: flex;
+  flex-direction: column;
+}
 
-  .protype{
-    margin-left: 10px;
-    display: flex;
-    font-size: large;
-  }
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
 
-  .radio-group{
-    padding-left: 10px;
-    font-size:large
-  }
+.protype {
+  display: flex;
+  flex-direction: column;
+}
+
+.protype label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  font-weight: bold;
+}
+
+.radio-group input[type="radio"] {
+  margin-right: 5px;
+}
+
+label[for^="image"] {
+  display: block;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Add more styles as needed */

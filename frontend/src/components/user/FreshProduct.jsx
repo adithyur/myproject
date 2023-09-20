@@ -13,7 +13,9 @@ function FreshProduct() {
   
     const fetchProducts = async () => {
       try {
-        const res = await axios.post(`http://localhost:8000/api/products/veproducts`);
+
+        const productType = 'fresh';
+        const res = await axios.get(`http://localhost:8000/api/products/gettype/${productType}`);
         //console.log("Products:", res.data);
   
         const productsWithRatings = await Promise.all(

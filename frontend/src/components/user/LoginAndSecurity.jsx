@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NoIconNav from './NoIconNav';
 import { Await } from 'react-router-dom';
 
 function LoginAndSecurity() {
     
-  const [showUsername, setShowUsername] = useState(false);
+  const [showUsername, setShowUsername] = useState(false); 
   const [showPassword, setShowPassword] = useState(false);
   const [showEmail, setShowEmail] = useState(false);
   const [showTrade, setShowTrade] = useState(false);
@@ -19,6 +20,7 @@ function LoginAndSecurity() {
   const [result, setResult] = useState('');
 
   const authid = localStorage.getItem('authid');
+  const navigate = useNavigate();
 
   const handleName = () => {
 
@@ -80,7 +82,7 @@ function LoginAndSecurity() {
   
             const usernameUpdateResult = usernameUpdateResponse.data;
             if (usernameUpdateResult.message === 'User name updated successfully') {
-            alert('Username updated successfully');
+              navigate('/login')
             } else {
             alert('Error updating username');
             }
@@ -94,7 +96,7 @@ function LoginAndSecurity() {
 
             const emailUpdateResult = emailUpdateResponse.data;
             if (emailUpdateResult.message === 'Email updated successfully') {
-            alert('Email updated successfully');
+              navigate('/login')
             } else {
             alert('Error updating email');
             }
@@ -105,13 +107,12 @@ function LoginAndSecurity() {
           if(newPassword1 == newPassword2){
             
             const passwordUpdateResponse = await axios.put(`http://localhost:8000/api/user/updatePassword/${authid}`, {
-              currentPassword: newPassword,
               newPassword2: newPassword2,
             });
 
             const passwordUpdateResult = passwordUpdateResponse.data;
             if (passwordUpdateResult.message === 'Password updated successfully') {
-            alert('Password updated successfully');
+              navigate('/login')
             } else {
             alert('Error updating Password');
             }
@@ -135,7 +136,7 @@ function LoginAndSecurity() {
 
             const tradeUpdateResult = tradeUpdateResponse.data;
             if (tradeUpdateResult.message === 'Password updated successfully') {
-            alert(' updated successfully');
+              navigate('/login')
             } else {
             alert('Error updating trade type');
             }
@@ -168,7 +169,7 @@ function LoginAndSecurity() {
               fontWeight: 'bold',
             }}
           >
-            <a href='./Rohit'>Account</a> &nbsp;&nbsp;&nbsp; &gt; &nbsp;&nbsp;&nbsp;Login & Security
+            <a href='./Profile'>Account</a> &nbsp;&nbsp;&nbsp; &gt; &nbsp;&nbsp;&nbsp;Login & Security
           </p>
         </div>
         <p
@@ -219,7 +220,7 @@ function LoginAndSecurity() {
                 Update your username to personalize your profile.
               </p>
               <button
-                style={{ marginLeft: '190px', marginBottom: '20px' }}
+                style={{ marginLeft: '190px', marginBottom: '20px', color:'green',border:'none', backgroundColor:'transparent', fontWeight:'bold' }}
                 onClick={handleName}
               >
                 UPDATE
@@ -236,10 +237,12 @@ function LoginAndSecurity() {
                         onChange={(e) => setNewName(e.target.value)}
                         required/> 
 
-                  <p style={{textAlign:'left', fontFamily:'arial',color: '#4F4F4A' }}>Password</p>
+                  <p style={{textAlign:'left', fontFamily:'arial',color: '#4F4F4A'}}>Password</p>
 
-                  <input type="text" 
+                  <input type='password' 
                     style={{marginLeft:'-450px', borderRadius:'5px', height:'40px', border: '1px solid #63635C', marginBottom:'20px'}}
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         required/>
@@ -279,7 +282,7 @@ function LoginAndSecurity() {
                 Update your email ID for notifications and account recovery.
               </p>
               <button
-                style={{ marginLeft: '120px', marginBottom: '20px' }}
+                style={{ marginLeft: '120px', marginBottom: '20px', color:'green',border:'none', backgroundColor:'transparent', fontWeight:'bold' }}
                 onClick={handleEmail}
               >
                 UPDATE
@@ -347,14 +350,14 @@ function LoginAndSecurity() {
                 Update your password and secure your account.
               </p>
               <button
-                style={{ marginLeft: '210px', marginBottom: '20px' }}
+                style={{ marginLeft: '210px', marginBottom: '20px', color:'green',border:'none', backgroundColor:'transparent', fontWeight:'bold' }}
                 onClick={handlePassword}
               >
                 UPDATE
               </button>
             </div>
             <div>
-              {/*showPassword && (
+              {showPassword && (
                 <div style={{marginLeft:'5px', marginTop:'5px'}}>
  
                 <p style={{textAlign:'left', fontFamily:'arial',color: '#4F4F4A' }}>Password</p>
@@ -377,6 +380,8 @@ function LoginAndSecurity() {
                       border: '1px solid #63635C',
                       marginBottom: '20px',
                     }}
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                    title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                     value={newPassword1}
                     onChange={(e) => setNewPassword1(e.target.value)}
                     required
@@ -393,6 +398,8 @@ function LoginAndSecurity() {
                         border: '1px solid #63635C',
                         marginBottom: '20px',
                       }}
+                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                      title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                       value={newPassword2}
                       onChange={(e) => setNewPassword2(e.target.value)}
                       required
@@ -414,7 +421,7 @@ function LoginAndSecurity() {
                       onMouseLeave={(e) => (e.target.style.color = 'black')}
                       onClick={handleSubmit}>Submit</a>
               </div>
-                    )*/}
+                    )}
             </div>
           </div>
 
@@ -436,7 +443,7 @@ function LoginAndSecurity() {
                 Update your trade type for a better user experience.
               </p>
               <button
-                style={{ marginLeft: '190px', marginBottom: '20px' }}
+                style={{ marginLeft: '190px', marginBottom: '20px', color:'green',border:'none', backgroundColor:'transparent', fontWeight:'bold' }}
                 onClick={handleTrade}
               >
                 UPDATE

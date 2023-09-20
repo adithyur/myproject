@@ -20,7 +20,7 @@ function ViewUser() {
       const res = await axios.post('http://localhost:8000/api/user/viewuser');
       setUsers(res.data);
     } catch (error) {
-      console.error('Error fetching order history:', error);
+      console.error('Error fetching users:', error);
     }
   };
 
@@ -38,21 +38,21 @@ function ViewUser() {
    <div className='fulladmin'>
         <div className='sideoption'>
           <div className='sideoption1'>
-            <h1 style={{paddingTop:'20px'}}>New2U</h1>
+            <h1 href='/AdminHome' style={{paddingTop:'20px'}}>New2U</h1>
             <table style={{width:'100%', marginTop:'40px'}}>
               <tr>
                 <td className='admindashtd1'>
-                  <div className='admindashdiv1'>
+                  <div href='/AdminHome' className='admindashdiv1'>
                   <AiOutlineHome style={{fontSize:'22'}}/>
-                  <a className='dashtxt' style={{marginLeft:'5px'}}>HOME</a>
+                  <a href='/AdminHome' className='dashtxt' style={{marginLeft:'5px'}}>HOME</a>
                   </div>
-                </td>
+                </td> 
               </tr>
               <tr>
                 <td className='admindashtd1'>
                 <div className='admindashdiv'>
                 <FaUsers style={{fontSize: '22'}}/>
-                <a className='dashtxt' style={{marginLeft:'5px'}}>MANAGE USER</a>
+                <a href='/ViewUser' className='dashtxt' style={{marginLeft:'5px'}}>MANAGE USER</a>
                 </div>
               </td>
               </tr>
@@ -60,26 +60,32 @@ function ViewUser() {
                 <td className='admindashtd2'>
                 <div className='admindashdiv2'>
                 <FaRobot style={{fontSize: '22'}}/>
-                <a className='dashtxt' style={{marginLeft:'5px'}}>MANAGE VERIFIER</a>
+                <a  href='/ViewVerifier' className='dashtxt' style={{marginLeft:'5px'}}>MANAGE VERIFIER</a>
                 </div>
                 </td>
               </tr>
               <tr>
-                <td className='admindashtd'>
+                <td className='admindashtd2'>
+                <div className='admindashdiv2'>
                 <FaTag style={{fontSize: '15'}}/>
                 <a className='dashtxt' style={{marginLeft:'5px'}}>MANAGE PRODUCT</a>
+                </div>
                 </td>
               </tr>
               <tr>
-                <td className='admindashtd'>
+                <td className='admindashtd2'>
+                <div className='admindashdiv2'>
                 <FaEye style={{fontSize: '22'}}/>
                 <a className='dashtxt' style={{marginLeft:'5px'}}>VIEW ORDERS</a>
+                </div>
                 </td>
               </tr>
               <tr>
-                <td className='admindashtd'>
+                <td className='admindashtd2'>
+                <div className='admindashdiv2'>
                 <BiLogOut style={{fontSize: '22'}}/>
                 <a className='dashtxt' style={{marginLeft:'5px'}}>LOGOUT</a>
+                </div>
                 </td>
               </tr>
             </table>

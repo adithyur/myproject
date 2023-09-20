@@ -1,10 +1,7 @@
 .fullverifier{
     background-image: url(/images/bg.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 1000px;
+    height: 2500px;
     display: flex;
-    color: white;
 }
 
 .sideoption{

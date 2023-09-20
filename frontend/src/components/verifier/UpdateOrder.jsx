@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { AiOutlineHome, AiFillHome } from 'react-icons/ai';
 import { FaTag } from 'react-icons/fa';
@@ -11,6 +12,10 @@ function UpdateOrder() {
 
     const [order, setOrder] = useState([]);
     const [newStatus, setNewStatus] = useState('');
+    const [showLogoutOverlay, setShowLogoutOverlay] = useState(false);
+
+    const navigate=useNavigate()
+    
   
     useEffect(() => {
       fetchOrder();
@@ -41,6 +46,15 @@ function UpdateOrder() {
       } else {
         alert('Please select a new status');
       }
+    };
+
+    const logout = () => {
+      setShowLogoutOverlay(true); 
+    }
+  
+    const handleLogoutOrder = () => {
+      localStorage.removeItem('authid')
+      navigate('/')
     };
 
   return (
@@ -87,14 +101,24 @@ function UpdateOrder() {
               <td className='verifierhomedashtd2'>
                   <div className='verifierdashdiv2'>
                     <FaEye style={{fontSize: '22'}}/>
-                    <a href='UpdateOrder' className='dashtxt' style={{marginLeft:'5px'}}>VIEW COMPLAINTS</a>
+                    <a className='dashtxt' style={{marginLeft:'5px'}}>VIEW COMPLAINTS</a>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td className='verifierhomedashtd'>
+              <td className='verifierhomedashtd' style={{cursor:'pointer'}}>
                 <BiLogOut style={{fontSize: '22'}}/>
-                <a href='/' className='dashtxt' style={{marginLeft:'5px'}}>LOGOUT</a>
+                <a onClick={logout} className='dashtxt' style={{marginLeft:'5px'}}>LOGOUT</a>
+                {showLogoutOverlay && (
+                    <div className="overlay">
+                      <div className="overlay-content">
+                        <h2>Signing Off</h2>
+                        <p>Are you sure you want to logout?</p>
+                        <button onClick={handleLogoutOrder}>Yes, Cancel</button>
+                        <button onClick={() => setShowLogoutOverlay(false)}>No, Go Back</button>
+                      </div>
+                    </div>
+                  )}
                 </td>
               </tr>
             </table>
